@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<CodeAnalysisRuleSet>..\.sonarlint\dot_net_jwlcsharp.ruleset</CodeAnalysisRuleSet>
+		<UserSecretsId>6f34b0b1-08f8-4a88-afc6-39dc2502cf47</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="..\.sonarlint\dot_net_jwl\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="10.0.0" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+		<PackageReference Include="EPPlus" Version="4.5.3.3" />
+		<PackageReference Include="EPPlus.DataExtractor" Version="2.2.0" />
+		<PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.2.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
+		<PackageReference Include="iTextSharp" Version="5.5.13.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+		<PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.20" />
+		<PackageReference Include="NLog" Version="4.7.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Data\Data.csproj" />
+		<ProjectReference Include="..\LoggerService\LoggerService.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\PDFTemplate\" />
+		<Folder Include="wwwroot\Document\" />
+		<Folder Include="wwwroot\PDFAttachment\" />
+		<Folder Include="wwwroot\signature\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="wwwroot\PDFTemplate\JWLNDA.htm" />
+	  <None Include="wwwroot\PDFTemplate\MasterBrokerCarrier.html" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+audit date time --desc
+audit user
+Operation Type
+Notes/Remarks updated from {oldvalues} to {newvalues}.
+
+Filters
+- User Name
+- Date Range
+
+Buttons
+Export To CSV with filters and sorting apply
+
+
+SET SQL_SAFE_UPDATES = 0;
+update audit set auditUser=null where auditUser='';
+SET SQL_SAFE_UPDATES = 1;
+
+ALTER TABLE `jwl`.`audit` 
+CHANGE COLUMN `auditUser` `auditUser` INT NULL DEFAULT NULL ;
+
+
+dot email
+validation
+recaptcha
+
+
+100
+filter date wise 40 records
+export 40
+

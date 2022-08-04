@@ -1,0 +1,293 @@
+﻿@*@model List<Models.carrierKPI>*@
+@model Models.carrierKPI
+@using Models
+@{
+    ViewData["Title"] = "Carrier Layout";
+}
+<div class="page-content">
+    <div class="wt-box">
+        <div class="table-responsive-lg horizontal-scrollable">
+            <table id="" class="table " style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Week Number</th>
+                        @*<th>Action</th>*@
+                        <th>Weekly Count</th>
+                        <th>Expected Pieces</th>
+                        <th>Load Scan Count</th>
+                        <th>Delivery Scan Count</th>
+                        <th>Photo Compliance Count</th>
+                        <th>GPS Compliance Count</th>
+                        <th>Delivery Scan Percentage</th>
+                        <th>Load Scan Percentage</th>
+                        <th>Photo Compliance Percentage</th>
+                        <th>GPS Compliance Percentage</th>
+                        <th>Load Scan Bonus Or Deduction</th>
+                        <th>Delivery Scan Bonus Or Deduction</th>
+                        <th>Photo Bonus Or Deduction</th>
+                        <th>GPS Compliance Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction To Be Applied</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.carrierKPISummary.Count > 0)
+                    {
+                        @foreach (var item in Model.carrierKPISummary)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WeekNumber)
+                                </td>
+                                @*<td>
+                                        <input type="button" class="viewDetailsByWeekNumber"
+                                               value="View Details" />
+                                    </td>*@
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Carrier)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WeeklyCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpectedPieces)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoComplianceCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSComplianceCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanPercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanPercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoCompliancePercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSCompliancePercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSComplianceBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalBonusOrDeductionToBeApplied)
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="17">
+                                <span class="text-center"> <b>No Carrier KPI details available.</b></span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <div class="table-responsive-lg horizontal-scrollable">
+            <table id="example-carrier-KPI" class="table" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Load Id</th>
+                        <th>Branch Id</th>
+                        <th>Route Code</th>
+                        <th>Route Date</th>
+                        <th>Stop Expected Pieces</th>
+                        <th>Loading Scan DateTime</th>
+                        <th>Load Scan Count</th>
+                        <th>Delivery Scan DateTime</th>
+                        <th>Delivery Scan Count</th>
+                        <th>Driver Number</th>
+                        <th>Photos Exist</th>
+                        <th>Photos Delivery Date</th>
+                        <th>Latitude Value Present </th>
+                        <th>Longitude Value Present </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Load Id</th>
+                        <th>Brach Id</th>
+                        <th>Route Code</th>
+                        <th>Route Date</th>
+                        <th>Stop Expected Pieces</th>
+                        <th>Loading Scan DateTime</th>
+                        <th>Load Scan Count</th>
+                        <th>Delivery Scan DateTime</th>
+                        <th>Delivery Scan Count</th>
+                        <th>Driver Number</th>
+                        <th>Photos Exist</th>
+                        <th>Photos Delivery Date</th>
+                        <th>Latitude Value Present </th>
+                        <th>Longitude Value Present </th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @if (Model.carrierKPIDetails.Count > 0)
+                    {
+
+                        @foreach (var item in Model.carrierKPIDetails)
+                        {
+                            <tr>
+
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.WeekNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Carrier)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CompanyNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CustomerNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Market)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Region)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UniqueIdNo)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BranchId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RouteCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RouteDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StopExpectedPieces)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.ReceivingScanDateTime)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReceivingScanPieces)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadingScanDateTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanDateTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DriverNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotosExist)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotosDeliveryDate)
+                                </td>
+                                <td>
+                                    @if (item.Latitude != null)
+                                    {
+                                        <span>Y</span>
+                                    }
+                                    else
+                                    {
+                                        <span>N</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Longitude != null)
+                                    {
+                                        <span>Y</span>
+                                    }
+                                    else
+                                    {
+                                        <span>N</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="17">
+                                <span class="text-center"> <b>No Carrier KPI details available.</b></span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //btn-export-carrier
+        $('#example-carrier-KPI tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        });
+        var table = $('#example-carrier-KPI').DataTable({
+            "oLanguage": {
+                "sEmptyTable": "No data available"
+            },
+            initComplete: function () {
+                // Apply the search
+                this.api().columns().every(function () {
+                    var that = this;
+
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        if (that.search() !== this.value) {
+                            that.search(this.value).draw();
+                        }
+                    });
+                });
+            },
+            "order": [],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1]
+                }
+            ]
+        });
+    });
+</script>

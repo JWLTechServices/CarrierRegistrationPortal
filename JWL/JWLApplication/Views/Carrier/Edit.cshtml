@@ -1,0 +1,1426 @@
+﻿@model Models.carrierusers
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<style>
+    .js-select2 {
+        height: auto;
+    }
+
+    .display-flex {
+        display: flex;
+    }
+</style>
+<div class="pge-content">
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Edit Carrier</h2>
+                </div>
+            </div>
+
+            <!-- <div class="col-lg-6">
+               <div class="right-button-box">
+                  <a asp-action="Index" class="btn btn-primary back-to-list">Back to List</a>
+               </div>
+            </div>  -->
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="cr-rgistration">
+            <form id="editCarrier" asp-action="Edit">
+                <div class="c-inform">
+                    <h2 class="f-block-title pt-4">CARRIER INFORMATION</h2>
+                </div>
+                <p class="agree-date">Agreement Date: <span>@Model.agreementDate.ToString("MM/dd/yyyy")</span></p>
+                <!-- form element CARRIER INFORMATION-->
+                <div class="form-elements">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>DOT#<span class="req-sign">*</span></label>
+                                <input asp-for="addtionalDot" class="form-control" placeholder="DOT#" />
+                                <span asp-validation-for="addtionalDot" class="text-danger"></span>
+                                <br />
+                                <span class="text-danger" id="alreadyDOT" style="display:none;">DOT already Exists</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="hidden" name="cuId" asp-for="cuId" />
+                            <input type="hidden" name="status" asp-for="status" />
+                            <input type="hidden" name="CreatedDate" asp-for="CreatedDate" />
+                            <input type="hidden" name="createdBy" asp-for="createdBy" />
+                            <input type="hidden" name="assignee" asp-for="assignee" />
+                            <input type="hidden" name="createdByUserName" asp-for="createdByUserName" />
+                            <input type="hidden" name="dtuid" asp-for="dtuid" />
+                            <div class="form-group">
+                                <label>MC#</label>
+                                <input type="text" asp-for="MC" class="form-control" placeholder="MC#">
+                                <span asp-validation-for="MC" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>CA# </label>
+                                <input type="text" class="form-control" asp-for="ca" placeholder="CA#">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Are you a broker or carrier?<span class="req-sign">*</span></label>
+                                <select type="text" class="form-control" asp-for="brokerOptions">
+                                    <option value="">Select</option>
+                                    <option value="Broker">Broker</option>
+                                    <option value="Carrier">Carrier</option>
+                                </select>
+                                <span asp-validation-for="brokerOptions" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Authorized Person<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="authorizedPerson" placeholder="Authorized Person">
+                                <span asp-validation-for="authorizedPerson" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Title<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="title" placeholder="Title">
+                                <span asp-validation-for="title" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Legal Company Name</label>
+                                <input type="text" class="form-control" asp-for="legalCompanyName" placeholder="Legal Company Name">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>DBA</label>
+                                <input type="text" class="form-control" asp-for="DBA" placeholder="DBA">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Email<span class="req-sign">*</span></label>
+                                <input class="form-control" asp-for="cuEmail" placeholder="Email">
+                                <span asp-validation-for="cuEmail" class="text-danger"></span>
+                                <br />
+                                <span class="text-danger" id="alreadyEmail" style="display:none;">Email already Exists</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Physical Address <span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="physicalAddress" placeholder="Physical Address">
+                                <span asp-validation-for="physicalAddress" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>State<span class="req-sign">*</span></label>
+                                <select class="form-control js-select2" asp-for="state" asp-items="@ViewBag.States">
+                                    <option value="">Select State</option>
+                                </select>
+                                <span asp-validation-for="state" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>City<span class="req-sign">*</span></label>
+                                @*<select name="city" class="form-control js-select2" asp-for="city">
+                                        <option value="">Select City</option>
+                                    </select>*@
+                                <input asp-for="city" class="form-control" placeholder="City">
+
+                                <span asp-validation-for="city" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Zip Code<span class="req-sign">*</span></label>
+                                <input asp-for="zipcode" class="form-control" placeholder="Zip Code">
+                                <span asp-validation-for="zipcode" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Phone<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" placeholder="(___) ___-____" asp-for="telephone">
+                                <span asp-validation-for="telephone" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Fax@*<span class="req-sign">*</span>*@</label>
+                                <input type="text" class="form-control" asp-for="fax" placeholder="(___) ___-____">
+                                <span asp-validation-for="fax" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>How long have you been in business? </label>
+                                <select type="text" class="form-control" asp-for="businessYear">
+                                    <option value="">Select</option>
+                                    <option value="0-5 years">0-5 years</option>
+                                    <option value="6-10 years">6-10 years</option>
+                                    <option value="11-15 years">11-15 years</option>
+                                    <option value="15+ years">15+ years</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Miles per year? </label>
+                                <select type="text" class="form-control" asp-for="milesPerYear">
+                                    <option value="">Select</option>
+                                    <option value="25K – 75K">25K – 75K</option>
+                                    <option value="76K – 100K">76K – 100K</option>
+                                    <option value="101K – 125K">101K – 125K</option>
+                                    <option value="125K+">125K+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Cargo Specialties<span class="select-all-font"> (Select all that apply)</span></label>
+                                <select id="selectedCargos" class="form-control select2_demo_1" asp-items="@ViewBag.CargoSpecialities" multiple>
+                                </select>
+                                <input type="hidden" asp-for="cargoSpecification" name="cargoSpecification" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Payment Methods<span class="select-all-font"> (Select all that apply)</span></label>
+                                <select id="selectedPayment" class="form-control select2_demo_1" asp-items="@ViewBag.PaymentTypes" multiple>
+                                </select>
+                                <input type="hidden" asp-for="paymentMethods" name="paymentMethods" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>What is your racial or ethnic identification?</label>
+                                <select type="text" class="form-control" asp-for="ethnicIdentification">
+                                    <option value="">Select</option>
+                                    <option value="1">American Indian or Alaska Native</option>
+                                    <option value="2">Asian</option>
+                                    <option value="3">Black or African American</option>
+                                    <option value="4">Hispanic or Latino</option>
+                                    <option value="5">Native Hawaiian or Other Pacific Islander</option>
+                                    <option value="6">White</option>
+                                    <option value="7">Other</option>
+                                    <option value="8">I prefer not to say</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Are you a minority owned business?</label>
+                                <select type="text" class="form-control" asp-for="isMinorityBusiness">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Are you a female-owned business? </label>
+                                <select type="text" class="form-control" asp-for="isFemaleOwned">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Are you a veteran-owned business?</label>
+                                <select type="text" class="form-control" asp-for="isVeteranOwned">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End form element -->
+                <!-- ADD FACTORING INFO, IF APPLICABLE -->
+                <h2 class="f-block-title mt-4">ADD FACTORING INFO, IF APPLICABLE</h2>
+                <div class="form-elements">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Factoring Company Name </label>
+                                <input type="text" class="form-control" asp-for="factoryCompanyName" placeholder="Factoring Company Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Contact Name </label>
+                                <input type="text" class="form-control" asp-for="factoryContactName" placeholder="Contact Name">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" class="form-control" placeholder="(___) ___-____" asp-for="factoryTelephone">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Fax</label>
+                                <input type="text" class="form-control" asp-for="factoryFax" placeholder="(___) ___-____">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Physical Address </label>
+                                <input type="text" class="form-control" asp-for="factoryPhysicalAddress" placeholder="Physical Address">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>State</label>
+                                <select class="form-control js-select2" asp-for="factoryState" asp-items="@ViewBag.FactoryStates">
+                                    <option value="">Select State</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>City</label>
+                                @*<select class="form-control js-select2" asp-for="factoryCity">
+                                        <option value="">Select City</option>
+                                    </select>*@
+                                <input type="text" class="form-control" asp-for="factoryCity" placeholder="City">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Zip Code</label>
+                                <input type="text" class="form-control" asp-for="factoryZipCode" placeholder="Zip Code">
+                                <span asp-validation-for="factoryZipCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End  ADD FACTORING INFO, IF APPLICABLE-->
+                <!-- ADDITIONAL INFORMATION -->
+                <h2 class="f-block-title mt-4">ADDITIONAL INFORMATION</h2>
+                <div class="form-elements">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Disptach Person Name<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="additionalPersonName" placeholder="Disptach Person Name">
+                                <span asp-validation-for="additionalPersonName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Dispatch Phone<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" placeholder="(___) ___-____" asp-for="addtionalPersonTelephone">
+                                <span asp-validation-for="addtionalPersonTelephone" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>After-Hours Dispatch Person Name <span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="addtionalAfterHoursPersonName" placeholder="Dispatch After-Hours Person Name">
+                                <span asp-validation-for="addtionalAfterHoursPersonName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>After-Hours Dispatch Phone<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" placeholder="(___) ___-____" asp-for="addtionalAfterHoursPersonTelephone">
+                                <span asp-validation-for="addtionalAfterHoursPersonTelephone" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>SCAC Code@*<span class="req-sign">*</span>*@</label>
+                                <input asp-for="additionalScac" class="form-control" placeholder="SCAC" />
+                                <span asp-validation-for="additionalScac" class="text-danger"></span>
+                                <span class="text-danger" id="alreadyadditionalScac" style="display:none;">SCAC already Exists</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Federal Tax ID<span class="req-sign">*</span></label>
+                                <input type="text" class="form-control" asp-for="additionalFedaralID" placeholder="Federal Tax ID" maxlength="11">
+                                <span asp-validation-for="additionalFedaralID" class="text-danger"></span>
+                                <span id="fedralTaxRequiredSpan" class="text-danger" style="display:none;">Please enter Federal Tax ID</span>
+                                <span id="fedralTaxSpan" class="text-danger" style="display:none;">Please enter valid Federal Tax ID</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>TWIC Certified? </label>
+                                <select type="text" class="form-control" asp-for="twic">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Hazmat Certified?<span class="req-sign">*</span> </label>
+                                <select type="text" class="form-control" asp-for="additionalHazmatCertified">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                                <span asp-validation-for="additionalHazmatCertified" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Hazmat Expiration Date</label>
+                                <input asp-for="additinalHazmatExpiryDate" class="form-control" placeholder="Hazmat Expiration Date" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Authorized Signature<span class="req-sign">*</span> </label>
+                                <input type="text" class="form-control" asp-for="authorizedSignature" placeholder="Type name">
+                                <span asp-validation-for="authorizedSignature" class="text-danger"></span>
+                                @*<span class="file-formate">file format jpg, gif, png</span>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Preferred Lanes </label>
+                                <input type="text" class="form-control" asp-for="additionalPreferredLanes" placeholder="Preferred Lanes">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Service Area<span class="req-sign">*</span></label>
+                                <select type="text" class="form-control" asp-for="serviceArea">
+                                    <option value="">Select</option>
+                                    <option value="Local">Local</option>
+                                    <option value="Regional">Regional</option>
+                                    <option value="National">National</option>
+                                </select>
+                                <span asp-validation-for="serviceArea" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Operating States<span class="select-all-font"> (Select all that apply)</span>@*<span class="req-sign">*</span>*@</label>
+                                <select id="selectMarket" class="form-control select2_demo_1" asp-items="@ViewBag.MarketStates" multiple>
+                                </select>
+                                <input type="hidden" asp-for="additionalMajorMakets" name="additionalMajorMakets" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>COI Expiry Date<span class="req-sign">*</span></label>
+                                <input asp-for="COIExpiryDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" placeholder="COI Expiry Date" />
+                                <span asp-validation-for="COIExpiryDate" class="text-danger"></span>
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <span class="text-danger" id="alertCOIExpiryDate" style="display:none;">COI Expiry Date is required.</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>carrier type?<span></span></label>
+                                <select type="text" class="form-control" asp-for="carriertype">
+                                    <option value="">Select</option>
+                                    <option value="CARR">Carrier</option>
+                                    <option value="IC">Independent Contractor</option>
+                                </select>
+                                <span asp-validation-for="carriertype" class="text-danger"></span>
+                                <span class="text-danger" id="alertcarriertype" style="display:none;">Please select carrier type</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Name to print on check<span></span> </label>
+                                <input type="text" class="form-control" asp-for="nametoprintoncheck" placeholder="Type name">
+                                <span asp-validation-for="nametoprintoncheck" class="text-danger"></span>
+                                <span class="text-danger" id="alertnametoprintoncheck" style="display:none;">Name to print on check is required.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Dynamics vendor id<span></span> </label>
+                                <input type="text" class="form-control" asp-for="dx_vendor_id" placeholder="Type vendor id">
+                                <span asp-validation-for="dx_vendor_id" class="text-danger"></span>
+                                <span class="text-danger" id="alertdx_vendor_id" style="display:none;">Dynamics vendor id is required.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cloneVehicleType">
+                        <input type="hidden" asp-for="CarrierwiseVehicle" name="CarrierwiseVehicle" />
+                        <div class="row divVehicle">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Vehicle Type </label>
+                                    <input type="hidden" class="hidden-vehicle-id" />
+                                    <select class="form-control js-select2 select-vehicle" asp-items="@ViewBag.VehicleTypes">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Fleet Size </label>
+                                    <input type="text" class="form-control fleet-vehicle" placeholder="Fleet Size">
+                                </div>
+                            </div>
+                            <div class="col-md-4 remove-vehicle-btn display-flex">
+                                <div class="form-group">
+                                    <input type="button" class="add-vehicle file-up-btn mr-top" value="Add New" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="additionalVehicle"></div>
+
+                    <div id="cloneTrailerType">
+                        <input type="hidden" asp-for="CarrierwiseTrailer" name="CarrierwiseTrailer" />
+                        <div class="row divTrailer">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Trailer Type</label>
+                                    <input type="hidden" class="hidden-trailer-id" />
+                                    <select class="form-control js-select2 select-trailer" asp-items="@ViewBag.TrailerType">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Trailer Count</label>
+                                    <input type="text" class="form-control fleet-trailer" placeholder="Trailer Count">
+                                </div>
+                            </div>
+                            <div class="col-md-4 remove-trailer-btn display-flex">
+                                <div class="form-group">
+                                    <input type="button" class="add-trailer file-up-btn mr-top" value="Add New" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="additionalTrailer"></div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group flex-div">
+                                @*<div class="sing-div-r">
+                                        <span>Or upload soft copy</span>
+                                        <div class="upload-btn-wrapper">
+                                            <button class="file-up-btn">Upload Sign</button>
+                                            <input type="file" name="myfile" accept="image/x-png,image/gif,image/jpeg" />
+                                            <input type="hidden" asp-for="authorizedSignaturePath" />
+                                        </div>
+                                    </div>
+                                    <div id="signaturePath">
+                                        <a href="#" class="imageLink btn btn-blue btn-blue-02" target="_blank">View</a>
+                                        <input type="button" class="file-up-btn mr-top" value="Remove" onclick="removeFile();" />
+                                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="doc-title">Attach Documents</h3>
+                        </div>
+                    </div>
+                    <div id="cloneAttachDocument" style="display:none;">
+                        <div class="row addDocument">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Document Type </label>
+                                    <select class="form-control js-select2 document-select">
+                                        <option value="">Select</option>
+                                        <option value="DOT certificate">DOT certificate</option>
+                                        <option value="Insurance">Insurance</option>
+                                        <option value="W9">W9</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <input type="text" class="form-control text-documenttype mt-2" style="display:none;" />
+                                    <span class="file-formate">file format pdf only</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="upload-btn-wrapper upload-doc">
+                                        <button class="file-up-btn">Upload Document</button>
+                                        <input type="file" name="myfile" accept="application/pdf" class="attachDocument" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 display-flex">
+                                <div class="form-group">
+                                    <input type="button" class="add-attachment file-up-btn mr-top" value="Add New" />
+                                </div>
+                                <div class="attachmentPath">
+                                    <a href="#" class="attachmentLink  btn btn-blue btn-blue-02 mr-top" target="_blank">View</a>
+                                    <input type="button" class="attachment-remove file-up-btn mr-top" value="Remove" />
+                                    <input type="hidden" asp-for="CarrierDocument" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="additionalAttachment"></div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a class="btn btn-blue-02" value="View NDA" href="@Model.ndaUrl" target="_blank">View NDA</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a class="btn btn-blue-02" value="View MBCA" href="@Model.mbcaUrl" target="_blank">View MBCA</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End  ADDITIONAL INFORMATION-->
+                <!-- ADD FACTORING INFO, IF APPLICABLE -->
+                <h2 class="f-block-title mt-4">Internal Use</h2>
+                <div class="form-elements">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>
+                                    Completed MBCA
+                                </label>
+                                <select class="form-control js-select2" asp-for="completedMBCA">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Report Sort key  </label>
+                                <input type="text" class="form-control" asp-for="reportSortKey">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>
+                                    NDA returned
+                                </label>
+                                <select class="form-control js-select2" asp-for="ndaReturned">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-end">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>
+                                    Onboarding completed
+                                </label>
+                                <select class="form-control js-select2" asp-for="onboardingCompleted">
+                                    <option value="">Select</option>
+                                    <option value="false">No</option>
+                                    <option value="true">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>
+                                    Payment Terms
+                                </label>
+                                <select class="form-control js-select2" asp-for="paymentTerms">
+                                    <option value="">Select</option>
+                                    <option value="NET 45">NET 45</option>
+                                    <option value="NET 30">NET 30</option>
+                                    <option value="NET 21">NET 21</option>
+                                    <option value="NET 14">NET 14</option>
+                                    <option value="NET 7">NET 7</option>
+                                    <option value="Expedited Payment">Expedited Payment</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Insurance Type</label>
+                                <div class="row">
+                                    <div class="col-md-4 pr-0">
+                                        1M General
+                                        <select class="form-control js-select2" asp-for="Ins1MGeneral">
+                                            <option value="">Select</option>
+                                            <option value="false">No</option>
+                                            <option value="true">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pr-0">
+                                        1M Auto
+                                        <select class="form-control js-select2" asp-for="Ins1MAuto">
+                                            <option value="">Select</option>
+                                            <option value="false">No</option>
+                                            <option value="true">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 pr-0">
+                                        Cargo
+                                        <select class="form-control js-select2" asp-for="insuranceType">
+                                            <option value="">Select</option>
+                                            <option value="Ins100KCargo">100K Cargo</option>
+                                            <option value="Ins250KCargo">250K Cargo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-submit-btn">
+                                <input type="submit" id="btnsubmit" value="Submit" class="btn btn-blue mr-3 w-165" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End  ADD FACTORING INFO, IF APPLICABLE-->
+            </form>
+            <!-- End form  -->
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(function () {
+            $(".attachmentPath").css('display', 'none');
+            $(".add-attachment").css('display', 'none');
+            var operatingStates = "@Model.additionalMajorMakets";
+            $("#selectMarket").val(operatingStates.split(','));
+
+            var cargos = "@Model.cargoSpecification";
+            $("#selectedCargos").val(cargos.split(','));
+
+            var Payment = "@Model.paymentMethods";
+            $("#selectedPayment").val(Payment.split(','));
+
+            var isValidTax = true;
+            $("#additionalFedaralID").keyup(function () {
+                var val = this.value;
+                var tax = new RegExp('[0-9]{3}\-[0-9]{2}\-[0-9]{4}$');
+                var tax1 = new RegExp('[0-9]{2}\-[0-9]{7}$');
+                if (val == null || val == "" || $.trim(val) == "") {
+                    $("#fedralTaxRequiredSpan").show();
+                    $("#fedralTaxSpan").hide();
+                    isValidTax = false;
+                }
+                else if (tax.test(val) || tax1.test(val)) {
+                    $("#fedralTaxSpan").hide();
+                    isValidTax = true;
+                }
+                else {
+                    $("#fedralTaxSpan").show();
+                    $("#fedralTaxRequiredSpan").hide();
+                    isValidTax = false;
+                }
+            });
+
+            $("#addtionalDot").on('change', function () {
+                if ($(this).val() != null && $(this).val() != "" && $.trim($(this).val()) != "") {
+                    $.ajax({
+                        url: "/Carrier/CheckDOT",
+                        data: {
+                            dot: $("#addtionalDot").val(),
+                            isEdit: "false"
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            else if (result == "True") {
+                                $("#alreadyDOT").show();
+                            }
+                            else {
+                                $("#alreadyDOT").hide();
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                }
+            });
+
+            $("#cuEmail").on('change', function () {
+                if ($(this).val() != null && $(this).val() != "" && $.trim($(this).val()) != "") {
+                    $.ajax({
+                        url: "/Carrier/CheckEmail",
+                        data: {
+                            email: $("#cuEmail").val(),
+                            isEdit: "false"
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            else if (result == "True") {
+                                $("#alreadyEmail").show();
+                            }
+                            else {
+                                $("#alreadyEmail").hide();
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                }
+            });
+
+            $("#additionalScac").on('change', function () {
+                $("#alreadyadditionalScac").hide();
+                if ($(this).val() != null && $(this).val() != "" && $.trim($(this).val()) != "") {
+                    $.ajax({
+                        url: "/Carrier/CheckSCACCode",
+                        data: {
+                            additionalScac: $("#additionalScac").val(),
+                            isEdit: "true",
+                            id: $("#cuId").val()
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            else if (result == "True") {
+                                $("#alreadyadditionalScac").show();
+                            }
+                            else {
+                                $("#alreadyadditionalScac").hide();
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                }
+              });
+
+            $("#editCarrier").submit(function () {
+                if (isValidTax == true) {
+                    if ($("#alreadyDOT").is(":visible") == false && $("#alreadyEmail").is(":visible") == false) {
+                        return true;
+                    }
+                    else {
+                        $("#addtionalDot").focus();
+                        return false;
+                    }
+                }
+                else {
+                    if ($("#fedralTaxSpan").is(":visible") == false) {
+                        $("#fedralTaxRequiredSpan").show();
+                    }
+                    return false;
+                }
+            });
+            var phones = [{ "mask": "(###) ###-####" }];
+            $('#telephone').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $('#fax').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $('#factoryTelephone').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $('#factoryFax').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $('#addtionalPersonTelephone').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $('#addtionalAfterHoursPersonTelephone').inputmask({
+                mask: phones,
+                greedy: false,
+                definitions: { '#': { validator: "[0-9]", cardinality: 1 } }
+            });
+            $("#serviceArea").change(function () {
+                if ($("#serviceArea option:selected").val() == "National") {
+                    $("#selectMarket").attr('disabled', true);
+                }
+                else {
+                    $("#selectMarket").attr('disabled', false);
+                }
+            });
+
+            $("#selectedCargos").change(function () {
+                $("#cargoSpecification").val($('#selectedCargos').val());
+            });
+
+            $("#selectedPayment").change(function () {
+                $("#paymentMethods").val($('#selectedPayment').val());
+            });
+            $("#selectMarket").change(function () {
+                $("#additionalMajorMakets").val($('#selectMarket').val());
+            });
+
+            var serviceArea= "@Model.serviceArea";
+            if (serviceArea == "National") {
+                $("#selectMarket").attr('disabled', true);
+            }
+            else {
+                $("#selectMarket").attr('disabled', false);
+            }
+            var vehicleType = @Html.Raw(@Model.CarrierwiseVehicle);
+
+            if (vehicleType != null && vehicleType != "" && vehicleType.length > 0) {
+                for (var i = 0; i < vehicleType.length; i++){
+                    if (i == 0) {
+                        $("#cloneVehicleType").children('.divVehicle').find('.hidden-vehicle-id').val(vehicleType[i].id);
+                        $("#cloneVehicleType").children('.divVehicle').find('select').val(vehicleType[i].selectedVehicle);
+                        $("#cloneVehicleType").children('.divVehicle').find("input[type='text']").val(vehicleType[i].numberOfVehicle);
+                        $("#cloneVehicleType").children('.divVehicle').find('.remove-vehicle-btn').hide();
+                    }
+                    else {
+                        var duplicate = $("#cloneVehicleType").clone();
+                        duplicate.children('div').children('.col-md-4:nth-child(1)').children('div').children('input[type="hidden"]').val('');
+                        duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                        duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').append('<input type="button" class="remove-vehicle file-up-btn mr-top" value="Remove" />');
+                        duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.remove-vehicle').show();
+                        duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.add-vehicle').hide();
+                        $('#additionalVehicle').append(duplicate);
+                        $("#additionalVehicle").children('div:nth-child('+i+')').children('.divVehicle').find('.hidden-vehicle-id').val(vehicleType[i].id);
+                        $("#additionalVehicle").children('div:nth-child('+i+')').children('.divVehicle').find('select').val(vehicleType[i].selectedVehicle);
+                        $("#additionalVehicle").children('div:nth-child('+i+')').children('.divVehicle').find("input[type='text']").val(vehicleType[i].numberOfVehicle);
+                    }
+                }
+
+
+                var duplicate = $("#cloneVehicleType").clone();
+                duplicate.children('div').children('.col-md-4:nth-child(1)').children('div').children('input[type="hidden"]').val('');
+                duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').append('<input type="button" class="remove-vehicle file-up-btn mr-top" value="Remove" />');
+                duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.add-vehicle').show();
+                duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.remove-vehicle').hide();
+                $('#additionalVehicle').append(duplicate);
+                $("#additionalVehicle .divVehicle:last-child .remove-vehicle-btn").show();
+            }
+            $("body").on("click", ".add-vehicle", function (event) {
+                var idVal = $(this).parent('div').parent('div').parent('.divVehicle').find("input[type='hidden']").val();
+                var selectedVal = $(this).parent('div').parent('div').parent('.divVehicle').find("select").val();
+                var textVal = $(this).parent('div').parent('div').parent('.divVehicle').find("input[type='text']").val();
+                if (selectedVal != null && selectedVal != "" && $.trim(selectedVal) != ""
+                    && textVal != null && textVal != "" && $.trim(textVal) != "") {
+                    array = $.grep(vehicleType, function (check) {
+                        return (check.selectedVehicle == selectedVal);
+                    });
+                    if (array.length > 0) {
+                        alert("Same vehicle Type is already added please update in that");
+                        return;
+                    }
+                    if(idVal!=null && idVal!=""){
+                        for (var i in vehicleType) {
+                         if (vehicleType[i].id == idVal) {
+                            vehicleType[i].selectedVehicle = selectedVal;
+                            vehicleType[i].numberOfVehicle = $.trim(textVal);
+                            break;
+                         }
+                       }
+                    }
+                    else{
+                        var obj = {};
+                        obj.id="";
+                        obj.selectedVehicle = selectedVal;
+                        obj.numberOfVehicle = $.trim(textVal);
+                        vehicleType.push(obj);
+                    }
+                    $("#CarrierwiseVehicle").val(JSON.stringify(vehicleType));
+                    $(this).parent('div').children('.remove-vehicle').show();
+                    $(this).hide();
+                    var duplicate = $("#cloneVehicleType").clone();
+                    duplicate.children('div').children('.col-md-4:nth-child(1)').children('div').children('input[type="hidden"]').val('');
+                    duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                    duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').append('<input type="button" class="remove-vehicle file-up-btn mr-top" value="Remove" />');
+                    duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.add-vehicle').show();
+                    duplicate.children('.divVehicle').children('.remove-vehicle-btn').children('div').children('.remove-vehicle').hide();
+                    $('#additionalVehicle').append(duplicate);
+                }
+                else {
+                    alert("Please select Vehicle Type and Fleet Size");
+                }
+
+            });
+            $("body").on("click", ".remove-vehicle", function (event) {
+                var removeVehicle = $(this).parent('div').parent('div').parent('div').children('.col-md-4:first-child').children('div').children('select').val();
+                if (removeVehicle != null && removeVehicle != "") {
+                    vehicleType = $.grep(vehicleType, function (value) {
+                        return value.selectedVehicle != removeVehicle;
+                    });
+                    $.ajax({
+                        url: "/Carrier/RemoveVehicle",
+                        data: {
+                            vehicleId: vehicleType[0].id
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return; }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    $("#CarrierwiseVehicle").val(JSON.stringify(vehicleType));
+                }
+                $(this).parent('div').parent('div').parent('div').parent('div').remove();
+            });
+
+            var trailerType =  @Html.Raw(@Model.CarrierwiseTrailer);
+            if (trailerType != null && trailerType != "" && trailerType.length > 0) {
+                for (var i = 0; i < trailerType.length; i++){
+                    if (i == 0) {
+                        $("#cloneTrailerType").children('.divTrailer').find('.hidden-trailer-id').val(trailerType[i].id);
+                        $("#cloneTrailerType").children('.divTrailer').find('select').val(trailerType[i].selectedTrailer);
+                        $("#cloneTrailerType").children('.divTrailer').find("input[type='text']").val(trailerType[i].numberOfVehicle);
+                        $("#cloneTrailerType").children('.divTrailer').find('.remove-trailer-btn').hide();
+                    }
+                    else {
+                        var duplicate = $("#cloneTrailerType").clone();
+                        duplicate.children('div').children('.col-md-4:nth-child(1)').children('div').children('input[type="hidden"]').val('');
+                        duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                        duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').append('<input type="button" class="remove-trailer file-up-btn mr-top" value="Remove" />');
+                        duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.remove-trailer').show();
+                        duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.add-trailer').hide();
+                        $('#additionalTrailer').append(duplicate);
+                        $("#additionalTrailer").children('div:nth-child('+i+')').children('.divTrailer').find('.hidden-trailer-id').val(trailerType[i].id);
+                        $("#additionalTrailer").children('div:nth-child('+i+')').children('.divTrailer').find('select').val(trailerType[i].selectedTrailer);
+                        $("#additionalTrailer").children('div:nth-child('+i+')').children('.divTrailer').find("input[type='text']").val(trailerType[i].numberOfVehicle);
+                    }
+                }
+
+
+                var duplicate = $("#cloneTrailerType").clone();
+                duplicate.children('div').children('.col-md-4:nth-child(1)').children('div').children('input[type="hidden"]').val('');
+                duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').append('<input type="button" class="remove-trailer file-up-btn mr-top" value="Remove" />');
+                duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.add-trailer').show();
+                duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.remove-trailer').hide();
+                $('#additionalTrailer').append(duplicate);
+                $("#additionalTrailer .divTrailer:last-child .remove-trailer-btn").show();
+            }
+
+
+            $("body").on("click", ".add-trailer", function (event) {
+
+                var selectedVal = $(this).parent('div').parent('div').parent('.divTrailer').find("select").val();
+                var textVal = $(this).parent('div').parent('div').parent('.divTrailer').find("input[type='text']").val();
+                if (selectedVal != null && selectedVal != "" && $.trim(selectedVal) != ""
+                    && textVal != null && textVal != "" && $.trim(textVal) != "") {
+
+                    array = $.grep(trailerType, function (check) {
+                        return (check.selectedTrailer == selectedVal);
+                    });
+                    if (array.length > 0) {
+                        alert("Same Trailer Type is already added please update in that");
+                        return;
+                    }
+
+                    var obj = {};
+                    obj.selectedTrailer = selectedVal;
+                    obj.numberOfVehicle = $.trim(textVal);
+                    trailerType.push(obj);
+                    $("#CarrierwiseTrailer").val(JSON.stringify(trailerType));
+                    $(this).parent('div').children('.remove-trailer').show();
+                    $(this).hide();
+                    var duplicate = $("#cloneTrailerType").clone();
+                    duplicate.children('div').children('.col-md-4:nth-child(2)').children('div').children('input[type="text"]').val('');
+                    duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').append('<input type="button" class="remove-trailer file-up-btn mr-top" value="Remove" />');
+                    duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.add-trailer').show();
+                    duplicate.children('.divTrailer').children('.remove-trailer-btn').children('div').children('.remove-trailer').hide();
+                    $('#additionalTrailer').append(duplicate);
+                }
+                else {
+                    alert("Please select Trailer Type and Trailer Count");
+                }
+
+            });
+            $("body").on("click", ".remove-trailer", function (event) {
+                var remoTrailer = $(this).parent('div').parent('div').parent('div').children('.col-md-4:first-child').children('div').children('select').val();
+                if (remoTrailer != null && remoTrailer != "") {
+                    trailerType = $.grep(trailerType, function (value) {
+                        return value.selectedTrailer != remoTrailer;
+                    });
+                    $.ajax({
+                        url: "/Carrier/RemoveTrailer",
+                        data: {
+                            trailerId: trailerType[0].id
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return; }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    $("#CarrierwiseTrailer").val(JSON.stringify(trailerType));
+                }
+                $(this).parent('div').parent('div').parent('div').parent('div').remove();
+            });
+            $("body").on("change", ".document-select", function (event) {
+                if ($(this).val() == "Other") {
+                    $(this).parent('div').children('.text-documenttype').show();
+                }
+                else {
+                    $(this).parent('div').children('.text-documenttype').hide();
+                }
+            });
+          var attachments = @Html.Raw(@Model.CarrierDocument);
+            var duplicate = $("#cloneAttachDocument").clone();
+            duplicate.removeAttr('style');
+            $('#additionalAttachment').append(duplicate);
+            if (attachments != null && attachments != "" && attachments.length > 0) {
+                for (var i = 0; i < attachments.length; i++) {
+                    if (i != 0) {
+                        var duplicate = $("#cloneAttachDocument").clone();
+                        duplicate.removeAttr('style');
+                        $('#additionalAttachment').append(duplicate);
+                    }
+                    var tempCount = i + 1;
+                    if (attachments[i].selectedVal.includes('_txt') == true) {
+                        $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-4:nth-child(1)').children('div').find("select").val("Other");
+                        $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-4:nth-child(1)').children('div').find(".text-documenttype").val(attachments[i].selectedVal.replace('_txt', ''));
+                        $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-4:nth-child(1)').children('div').find(".text-documenttype").show();
+                    }
+                    else {
+                        $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-4:nth-child(1)').children('div').find("select").val(attachments[i].selectedVal);
+                        $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-4:nth-child(1)').children('div').find(".text-documenttype").hide();
+                    }
+                    $('#additionalAttachment').children('div').children('.addDocument:nth-child(' + i + ')').children('.col-md-3:nth-child(2)').children('div').find("input[name='myfile']").attr("value",attachments[i].url);
+                    $('#additionalAttachment').children('div').children('div').find(".attachmentPath").show();
+                    $('#additionalAttachment').children('div').children('div').find(".add-attachment").hide();
+                    $('#additionalAttachment').children('div:nth-child(' + tempCount + ')').children('.addDocument').children('.col-md-5').children(".attachmentPath").children('a').attr('href', attachments[i].url);
+                    if ($('#additionalAttachment').children('div').children('.addDocument').length == 1) {
+                        $('#additionalAttachment').children('div').children('.addDocument').children('.col-md-5').children('.attachmentPath').children('.attachment-remove').hide();
+                    }
+
+                }
+                var duplicate = $("#cloneAttachDocument").clone();
+                duplicate.removeAttr('style');
+                $('#additionalAttachment').append(duplicate);
+            }
+            $("body").on("change", ".attachDocument", function (event) {
+                var selectedVal = $(this).parent('div').parent('div').parent('div').parent('.addDocument').find("select").val();
+                if (selectedVal == "Other") {
+                    selectedVal = "_txt"+ $(this).parent('div').parent('div').parent('div').parent('.addDocument').find('.text-documenttype').val() ;
+                }
+                if (selectedVal == null || selectedVal == ""||selectedVal=="_txt") {
+                    alert('Please select valid Document Type');
+                    return;
+                }
+                var fileUpload = $(this).parent('div').parent('div').parent('div').parent('.addDocument').find("input[name='myfile']").get(0);
+                var files = fileUpload.files;
+                if (files.length == 0) {
+                    alert('Please select valid document');
+                    return;
+                }
+                array = $.grep(attachments, function (check) {
+                    return (check.selectedVal == selectedVal);
+                });
+                if (array.length > 0) {
+                    alert("Same Document Type is already added please update in that");
+                    return;
+                }
+                var data = new FormData();
+                data.set('selectedVal', selectedVal);
+                data.append(files[0].name, files[0]);
+                var path = "";
+                $.ajax({
+                    type: "POST",
+                    url: "/carrier/UploadAttachment",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    async: false,
+                    beforeSend: function () {
+                        $(".preloader-backdrop").show();
+                    },
+                    success: function (message) {
+                        if (message == "null") {
+                            var win = window.open("/users/login", "_self"); return;
+                        }
+                        var obj = {};
+                        obj.url = message;
+                        obj.selectedVal = $.trim(selectedVal);
+                        attachments.push(obj);
+                        $("#CarrierDocument").val(JSON.stringify(attachments));
+                        path = message;
+                    },
+                    error: function () {
+                        alert("Something wrong! Please try again.");
+                    },
+                    complete: function () {
+                        $(".preloader-backdrop").hide();
+                    }
+                });
+
+                if ($(this).parent('div').parent('div').parent('div').parent('div').parent('div').parent('div').children('#cloneAttachDocument').length == 1) {
+                    $(this).parent('div').parent('div').parent('div').parent('.addDocument').children('.col-md-5').children('.attachmentPath').children('.attachment-remove').hide();
+                }
+                $(this).parent('div').parent('div').parent('div').parent('.addDocument').children('.col-md-5').children('.attachmentPath').show();
+                $(this).parent('div').parent('div').parent('div').parent('.addDocument').children('.col-md-5').children('div').children('.add-attachment').show();
+                $(this).parent('div').parent('div').parent('div').parent('.addDocument').children('.col-md-5').children('div').children('.add-attachment').children('.attachment-remove').show();
+                $(this).parent('div').parent('div').parent('div').parent('.addDocument').children('.col-md-5').children('.attachmentPath').children('a').attr('href', path);
+
+            });
+            $("body").on("click", ".add-attachment", function (event) {
+                $(this).hide();
+                var duplicate = $("#cloneAttachDocument").clone();
+                duplicate.removeAttr('style');
+                duplicate.children('div').children('.col-md-5').children('.attachmentPath').children('.attachment-remove').show();
+                $('#additionalAttachment').append(duplicate);
+            });
+
+            $("body").on("click", ".attachment-remove", function (event) {
+                var selectedVal = $(this).closest('div').children('a').attr('href');
+                $.ajax({
+                    url: "/Carrier/RemoveFile",
+                    data: {
+                        file: selectedVal
+                    },
+                    dataType: "json",
+                    type: 'POST',
+                    async: false,
+                    beforeSend: function () {
+                        $(".preloader-backdrop").show();
+                    },
+                    success: function (result) {
+
+                        if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                        if (result == "Success") {
+                            attachments = $.grep(attachments, function (value) {
+                                return value.url != selectedVal;
+                            });
+                            $("#CarrierDocument").val(JSON.stringify(attachments));
+                        }
+                    },
+                    error: function (err, xhr, text) {
+                        console.log(err);
+                    },
+                    complete: function () {
+                        $(".preloader-backdrop").hide();
+                    }
+                });
+                if ($(this).parent('div').parent('div').children('div:first-child').children('.add-attachment').is(":visible")) {
+                    $(this).parent('div').parent('div').parent('div').remove();
+                    var duplicate = $("#cloneAttachDocument").clone();
+                    duplicate.removeAttr('style');
+                    $('#additionalAttachment').append(duplicate);
+                }
+                else {
+                    $(this).parent('div').parent('div').parent('div').remove();
+                }
+            });
+
+            $("#btnsubmit").click(function () {
+                if ($("#COIExpiryDate").val() == "") {
+                    $("#alertCOIExpiryDate").show();
+                    alert("COI Expiry Date is required.");
+                    return false;
+                } else {
+                    $("#alertCOIExpiryDate").hide();
+                }
+
+                if ($("#carriertype").val() == "") {
+                    $("#alertcarriertype").show();
+                    alert("Please select carrier type.");
+                    return false;
+                } else {
+                    $("#alertcarriertype").hide();
+                }
+
+                if ($("#nametoprintoncheck").val() == "") {
+                    $("#alertnametoprintoncheck").show();
+                    alert("Name to print on check is required.");
+                    return false;
+                } else {
+                    $("#alertnametoprintoncheck").hide();
+                }
+                if ($("#dx_vendor_id").val() == "") {
+                    $("#alertdx_vendor_id").show();
+                    alert("Dynamics vendor id is required.");
+                  //  return false;
+                } else {
+                    $("#alertdx_vendor_id").hide();
+                }
+
+
+            });
+        });
+        function uploadFiles() {
+            var fileUpload = $("input[name='mysignature']").get(0);
+            var files = fileUpload.files;
+            var data = new FormData();
+            data.append(files[0].name, files[0]);
+            $.ajax({
+                type: "POST",
+                url: "/carrier/UploadSignature",
+                contentType: false,
+                processData: false,
+                data: data,
+                async: false,
+                beforeSend: function () {
+                    $(".preloader-backdrop").show();
+                },
+                success: function (message) {
+                    setTimeout(function () {
+                        $("#authorizedSignaturePath").val(message);
+                        $("#signaturePath").css('display', 'inline');
+                        $(".imageLink").attr('href', message);
+                    }, 2000);
+                },
+                error: function () {
+                    alert("Error!");
+                },
+                complete: function () {
+                    $(".preloader-backdrop").hide();
+                }
+            });
+        }
+        function removeFile() {
+            $.ajax({
+                url: "/Carrier/RemoveFile",
+                data: {
+                    file: $("#authorizedSignaturePath").val()
+                },
+                dataType: "json",
+                type: 'POST',
+                async: false,
+                beforeSend: function () {
+                    $(".preloader-backdrop").show();
+                },
+                success: function (result) {
+
+                    if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                    if (result == "Success") {
+                        setTimeout(function () {
+                            $("#authorizedSignaturePath").val("");
+                            $("#signaturePath").css('display', 'none');
+                            $(".imageLink").attr('href', '#');
+                        }, 2000);
+                    }
+                },
+                error: function (err, xhr, text) {
+                    console.log(err);
+                },
+                complete: function () {
+                    $(".preloader-backdrop").hide();
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        function preventBack() { window.history.forward(); }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+}

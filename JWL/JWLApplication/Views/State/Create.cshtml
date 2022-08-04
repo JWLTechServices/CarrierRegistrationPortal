@@ -1,0 +1,65 @@
+﻿@model Models.state
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="pge-content">
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Create State</h2>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="right-button-box">
+                    <a asp-action="Index" class="btn btn-primary back-to-list">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="cr-rgistration">
+            <div class="c-inform">
+                <h2 class="f-block-title pt-4"></h2>
+            </div>
+            <form asp-action="Create">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label>States<span class="req-sign">*</span></label>
+                            <input asp-for="stateName" class="form-control" />
+                            <span asp-validation-for="stateName" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label>Active?</label>
+                            <select asp-for="isActive" class="form-control">
+                                <option value="">Select</option>
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                            <span asp-validation-for="isActive" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

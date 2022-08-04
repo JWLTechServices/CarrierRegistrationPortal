@@ -1,0 +1,12 @@
+{
+  "ServerUri": "http://192.168.1.84:9000/",
+  "Organization": null,
+  "ProjectKey": "DOT_NET_JWL",
+  "ProjectName": "DOT_NET_JWL",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AW3UpMgwwULxdQUNyuiW",
+      "ProfileTimestamp": "2019-10-16T12:57:11Z"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+﻿@using Models
+@{
+    ViewData["Title"] = "Carrier Layout";
+    Layout = "~/Views/Shared/_CarrierLayout.cshtml";
+}
+<style>
+    td:last-child a {
+        width: 21px;
+    }
+
+    .wrap-div {
+        display: block;
+    }
+
+    .horizontal-scrollable {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table > thead > tr {
+        font-size: large;
+    }
+</style>
+<div class="page-content">
+    <!-- content header-->
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-12">
+                <div class="p-title">
+                    <table>
+                        <tr>
+                            <td>
+                                <h4><b>Carrier KPI's Details For Week Number : &nbsp; </b></h4>
+                            </td>
+                            <td>
+                                <select class="form-control" style="min-width:150px" id="viewDetailsByWeekNumber" asp-items="@ViewBag.WeekNumbers">
+                                    @*<option value="">Select WeekNumber</option>*@
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End header-->
+<!-- page content-->
+<div id="viewKPIDetails"></div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+      //  debugger;
+        var val = '@ViewBag.RecentWeekNumber';
+        LoadCarrierKPIDetails(val);
+        $('#viewDetailsByWeekNumber').change(function () {
+           // debugger;
+            var WeekNumber = $(this).val();
+            LoadCarrierKPIDetails(WeekNumber);
+        });
+        function LoadCarrierKPIDetails(WeekNumber) {
+          //  debugger;
+            $("#viewKPIDetails").load("/carrier/ViewCarrierKPIDetails",
+                { param: WeekNumber });
+        }
+        $('#idPerformance').addClass("active");
+    });
+</script>
+
+
+

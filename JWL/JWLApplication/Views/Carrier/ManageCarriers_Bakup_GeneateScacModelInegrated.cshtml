@@ -1,0 +1,681 @@
+﻿@model IEnumerable<Models.carrierusers>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Models
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    td:last-child a {
+        width: 21px;
+    }
+</style>
+<div class="page-content">
+    <!-- content header-->
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Manage Carriers</h2>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="right-button-box">
+                    <a href="@Url.Action("ExportToExcel", "carrier")" class="btn btn-primary">Export To Excel</a>
+                    <a href="@Url.Action("Register", "carrier")" class="btn btn-primary">Add New</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End header-->
+    <!-- page content-->
+    <div class="wt-box">
+        <!-- Main Tab Start-->
+
+        <table id="example-manage-carrier" class="table" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Created On
+                    </th>
+                    <th>
+                        Created By
+                    </th>
+                    <th>
+                        Assignee
+                    </th>
+                    <th class="action-col">Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Assignee</th>
+                    <th style="display:none;width:10%">Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.authorizedPerson)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.physicalAddress)
+                            @Html.DisplayFor(modelItem => item.city)
+                            @Html.DisplayFor(modelItem => item.States.stateName)
+                            @Html.DisplayFor(modelItem => item.zipcode)
+                        </td>
+                        <td>
+                            @{
+                                if (@item.cuEmail.Length > 20)
+                                {
+                                    <label>@item.cuEmail.Substring(0, 20)...</label>
+                                }
+                                else
+                                {
+                                    <label>
+                                        @item.cuEmail
+                                    </label>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.telephone)
+                        </td>
+                        <td class="update-status-temp">
+                            @Html.DisplayFor(modelItem => item.status)
+
+                        </td>
+                        <td>
+                            @item.CreatedDate.ToString("MM/dd/yyyy HH:mm tt", System.Globalization.CultureInfo.InvariantCulture)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.createdByUserName)*@
+                            @{
+                                if (item.cuId == item.createdBy)
+                                {
+                                    @Html.DisplayFor(modelItem => item.authorizedPerson)
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.CreatedUserName)
+                                }
+                            }
+
+                        </td>
+                        <td class="update-assign">
+                            @Html.DisplayFor(modelItem => item.Users.name)
+                        </td>
+                        <td>
+                            <a class="edit-action" href="@Url.Action("Edit", "carrier",new { id=@item.cuId})">
+                                <i class="fa fa-pencil font-20" aria-hidden="true"></i>
+                            </a>
+                            <a class="delete-action" onclick="DeleteCarrier('@item.cuId');"><i class="fa fa-trash" font-20 aria-hidden="true"></i></a>
+                            @{int i = (int)item.status;}
+                            <a class="change-status"><i class="fa fa-ellipsis-v font-20" aria-hidden="true"></i></a>
+                            <div class="changeStatus" style="display:none;">
+
+                                <select asp-items="Html.GetEnumSelectList<StatusEnum>()">
+                                </select>
+                                <input type="hidden" value="@item.cuId" class="hidden-id" />
+                                <input type="hidden" value="@item.status" class="hidden-status" />
+                                <input type="hidden" value="@item.additionalScac" class="hidden-additionalScac" />
+                                <a class="save-status">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </a>
+                                <a class="cancel-status"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        <!-- End main Tab -->
+
+    </div>
+    <!-- End page content-->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="GenerateSCACModal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLongTitle">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You have not provided SCAC code for this carrier. SCAC Code is a required field. Does the carrier have a SCAC Code?
+                If so, please click the “Close” button and start the process again after you have the SCAC code.
+                If not, please press “Generate Random SCAC code” button.  Do remember – once the Random SCAC code is generated, you will never be able to change it.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnGenerateSCAC" class="btn btn-primary">Generate Random SCAC code</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        var selectedCuId;
+        $(function () {
+
+            //btn-export-carrier
+            $('#example-manage-carrier tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+            var table = $('#example-manage-carrier').DataTable({
+                "oLanguage": {
+                    "sEmptyTable": "No data available"
+                },
+                initComplete: function () {
+                    // Apply the search
+                    this.api().columns().every(function () {
+                        var that = this;
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+                },
+                "order": [],
+                aoColumnDefs: [
+                    {
+                        bSortable: false,
+                        aTargets: [-1]
+                    }
+                ]
+            });
+            $("body").on("click", ".change-status", function (event) {
+                $(this).closest('td').children('.changeStatus').show();
+                var status = $(this).closest('td').children('.changeStatus').children('.hidden-status').val();
+                $(this).closest('td').children('.changeStatus').children("select option:contains(" + status + ")").attr('selected', 'selected');
+            });
+            $("body").on("click", ".cancel-status", function (event) {
+                $(this).closest('div').hide();
+            });
+            $("body").on("click", ".save-status", function (event) {
+                var tempResult;
+                var oldStatus = $(this).closest('div').children('.hidden-status').val();
+                var newStatus = $(this).closest('div').children('select').val();
+                var additionalScac = $(this).closest('div').children('.hidden-additionalScac').val();
+                selectedCuId = $(this).closest('div').children('.hidden-id').val();
+                var selectedRow = $(this).closest('div');
+
+                if (oldStatus == "New" && newStatus == "2") {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        $(this).closest('div').children('.hidden-status').val('Inprocess');
+                    }
+                }
+                else if (oldStatus == "Inprocess" && (newStatus == "3" || newStatus == "5" || newStatus == "6")) {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                             if (result == "null") { var win = window.open("/users/login", "_self");return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        if (newStatus == "3") {
+                            $(this).closest('div').children('.hidden-status').val('Complete');
+                        }
+                        if (newStatus == "5") {
+                            $(this).closest('div').children('.hidden-status').val('Rejected');
+                        }
+                        if (newStatus == "6") {
+                            $(this).closest('div').children('.hidden-status').val('Onhold');
+                        }
+                    }
+                }
+                else if (oldStatus == "Complete" && (newStatus == "4" || newStatus == "5" || newStatus == "6" || newStatus == "2")) {
+                   //  debugger;
+                   // To check is additionalScac is update else get confirmation from user to create it.
+                    if (newStatus == "4" && additionalScac == "") {
+                        var selectedStatus = $(this).closest('div').children('select').val()
+                        $('#GenerateSCACModal').modal('show');
+                        $("#btnGenerateSCAC").click(function () {
+                            $.ajax({
+                                url: "/Carrier/GenerateSCACCode",
+                                data: {
+                                    id: selectedCuId,
+                                },
+                                dataType: "json",
+                                type: 'POST',
+                                async: false,
+                                beforeSend: function () {
+                                    $(".preloader-backdrop").show();
+                                },
+                                success: function (result) {
+                                  //  debugger;
+                                    if (result == "null") { var win = window.open("/users/login", "_self"); return; }
+                                    var varResult = result.split(',');
+                                    if (varResult != null && varResult.length > 0) {
+                                        // alert(varResult[0]);
+                                        $('#GenerateSCACModal').modal('hide');
+                                        if (varResult[1] == "S") {
+                                            $.ajax({
+                                                url: "/Carrier/ChangeStatus",
+                                                data: {
+                                                    id: selectedCuId,
+                                                    status: selectedStatus
+                                                },
+                                                dataType: "json",
+                                                type: 'POST',
+                                                async: false,
+                                                beforeSend: function () {
+                                                    $(".preloader-backdrop").show();
+                                                },
+                                                success: function (result) {
+                                                    //debugger;
+                                                    if (result == "null") { var win = window.open("/users/login", "_self"); return; }
+                                                    tempResult = result.split(',');
+                                                    if (tempResult != null && tempResult.length > 0) {
+                                                        alert(tempResult[0]);
+                                                        $('.changeStatus').hide();
+                                                        $(selectedRow).children('.hidden-additionalScac').val(varResult[2]);
+                                                    }
+                                                    else {
+                                                        alert(result);
+                                                    }
+                                                },
+                                                complete: function () {
+                                                    $(".preloader-backdrop").hide();
+                                                }
+                                            });
+                                          //  debugger;
+                                            if (tempResult != null && tempResult.length > 0) {
+                                                if ($(selectedRow).children('select').val() == "2") {
+                                                    $(selectedRow).parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                                                }
+                                                $(selectedRow).parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                                                if (newStatus == "2") {
+                                                    $(selectedRow).children('.hidden-status').val('Inprocess');
+                                                }
+                                                if (newStatus == "4") {
+                                                    $(selectedRow).children('.hidden-status').val('Approved');
+                                                }
+                                                if (newStatus == "5") {
+                                                    $(selectedRow).children('.hidden-status').val('Rejected');
+                                                }
+                                                if (newStatus == "6") {
+                                                    $(selectedRow).children('.hidden-status').val('Onhold');
+                                                }
+                                            }
+                                        } else {
+                                            alert(result);
+                                        }
+                                    }
+                                    else {
+                                        alert(result);
+                                    }
+                                },
+                                complete: function () {
+                                    $(".preloader-backdrop").hide();
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        $.ajax({
+                            url: "/Carrier/ChangeStatus",
+                            data: {
+                                id: $(this).closest('div').children('.hidden-id').val(),
+                                status: $(this).closest('div').children('select').val()
+                            },
+                            dataType: "json",
+                            type: 'POST',
+                            async: false,
+                            beforeSend: function () {
+                                $(".preloader-backdrop").show();
+                            },
+                            success: function (result) {
+                               // debugger;
+                                if (result == "null") { var win = window.open("/users/login", "_self"); return; }
+                                tempResult = result.split(',');
+                                if (tempResult != null && tempResult.length > 0) {
+                                    alert(tempResult[0]);
+                                    $('.changeStatus').hide();
+                                }
+                                else {
+                                    alert(result);
+                                }
+                            },
+                            complete: function () {
+                                $(".preloader-backdrop").hide();
+                            }
+                        });
+
+                        if (tempResult != null && tempResult.length > 0) {
+                            if ($(this).closest('div').children('select').val() == "2") {
+                                $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                            }
+                            $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                            if (newStatus == "2") {
+                                $(this).closest('div').children('.hidden-status').val('Inprocess');
+                            }
+                            if (newStatus == "4") {
+                                $(this).closest('div').children('.hidden-status').val('Approved');
+                            }
+                            if (newStatus == "5") {
+                                $(this).closest('div').children('.hidden-status').val('Rejected');
+                            }
+                            if (newStatus == "6") {
+                                $(this).closest('div').children('.hidden-status').val('Onhold');
+                            }
+                        }
+                    }
+                }
+                else if (oldStatus == "Approved" && (newStatus == "7" || newStatus == "6" || newStatus == "3" || newStatus == "2")) {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                             if (result == "null") { var win = window.open("/users/login", "_self");return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        if (newStatus == "2") {
+                            $(this).closest('div').children('.hidden-status').val('Inprocess');
+                        }
+                        if (newStatus == "3") {
+                            $(this).closest('div').children('.hidden-status').val('Complete');
+                        }
+                        if (newStatus == "6") {
+                            $(this).closest('div').children('.hidden-status').val('Onhold');
+                        }
+                        if (newStatus == "7") {
+                            $(this).closest('div').children('.hidden-status').val('Terminated');
+                        }
+                    }
+                }
+                else if (oldStatus == "Rejected" && (newStatus == "2" || newStatus == "3")) {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        if (newStatus == "2") {
+                            $(this).closest('div').children('.hidden-status').val('Inprocess');
+                        }
+                        if (newStatus == "3") {
+                            $(this).closest('div').children('.hidden-status').val('Complete');
+                        }
+                    }
+                }
+                else if (oldStatus == "Onhold" && (newStatus == "7" || newStatus == "2" || newStatus == "3" || newStatus == "4")) {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        if (newStatus == "2") {
+                            $(this).closest('div').children('.hidden-status').val('Inprocess');
+                        }
+                        if (newStatus == "3") {
+                            $(this).closest('div').children('.hidden-status').val('Complete');
+                        }
+                        if (newStatus == "4") {
+                            $(this).closest('div').children('.hidden-status').val('Approved');
+                        }
+                        if (newStatus == "7") {
+                            $(this).closest('div').children('.hidden-status').val('Terminated');
+                        }
+                    }
+                }
+                else if (oldStatus == "Terminated" && (newStatus == "6" || newStatus == "4")) {
+                    $.ajax({
+                        url: "/Carrier/ChangeStatus",
+                        data: {
+                            id: $(this).closest('div').children('.hidden-id').val(),
+                            status: $(this).closest('div').children('select').val()
+
+                        },
+                        dataType: "json",
+                        type: 'POST',
+                        async: false,
+                        beforeSend: function () {
+                            $(".preloader-backdrop").show();
+                        },
+                        success: function (result) {
+                            if (result == "null") { var win = window.open("/users/login", "_self"); return;}
+                            tempResult = result.split(',');
+                            if (tempResult != null && tempResult.length > 0) {
+                                alert(tempResult[0]);
+                                $('.changeStatus').hide();
+
+                            }
+                            else {
+                                alert(result);
+                            }
+                        },
+                        complete: function () {
+                            $(".preloader-backdrop").hide();
+                        }
+                    });
+                    if (tempResult != null && tempResult.length > 0) {
+                        if ($(this).closest('div').children('select').val() == "2") {
+                            $(this).closest('div').parent('td').parent('tr').children('.update-assign').text('@HttpContextAccessor.HttpContext.Session.GetString("UserFullName")');
+                        }
+                        $(this).closest('div').parent('td').parent('tr').children('.update-status-temp').text(tempResult[1]);
+                        if (newStatus == "4") {
+                            $(this).closest('div').children('.hidden-status').val('Approved');
+                        }
+                        if (newStatus == "6") {
+                            $(this).closest('div').children('.hidden-status').val('Onhold');
+                        }
+                    }
+                }
+                else {
+                    alert("Please select Valid Status.")
+                }
+            });
+        });
+        function DeleteCarrier(id) {
+            var r = confirm("Are you sure you want to delete Carrier?");
+            if (r == true) {
+                $.ajax({
+                    url: "/Carrier/Delete",
+                    data: {
+                        id: id
+                    },
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (result) {
+                        if (result == "delete") { var win = window.open("/users/login", "_self"); return;}
+                        alert(result);
+                        $(this).closest('td').children('.changeStatus').hide();
+                        location.reload(true);
+                    }
+                });
+            } else {
+                txt = "You pressed Cancel!";
+            }
+
+        }
+
+    $(document).ready(function () {
+        var jwlNDAURL = "@Html.Raw(TempData["JWLNDAPDF"])";
+        var masterBrokerCarrierURL = "@Html.Raw(TempData["MasterBrokerCarrierPDF"])";
+        var isBackbutton = false;
+        if (jwlNDAURL != '' && masterBrokerCarrierURL != '' && isBackbutton == false) {
+            var win = window.open(jwlNDAURL, '_blank');
+            var win = window.open(masterBrokerCarrierURL, '_blank');
+            jwlNDAURL = '';
+            masterBrokerCarrierURL = '';
+            isBackbutton = true;
+        }
+        $('a.menu-list').removeClass("active");
+        $('#idCarriers').addClass("active");
+    });
+    </script>
+}

@@ -1,0 +1,362 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <meta name="google-signin-client_id" content="327497276189-j0ol5jq6959jdjbbdo74a0emia6i7hob.apps.googleusercontent.com">
+    <title> JWL | Dashboard</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <link href="~/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- PLUGINS STYLES-->
+    <link href="~/vendors/jvectormap/jquery-jvectormap-2.0.3.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <!-- THEME STYLES-->
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+    <style>
+        tfoot {
+            display: table-header-group;
+        }
+
+            tfoot input {
+                width: 100%;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+
+        table.dataTable tbody tr {
+            background-color: #ffffff !important;
+        }
+
+            table.dataTable tbody tr:hover {
+                background-color: #ffffff !important;
+            }
+
+        table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1 {
+            background-color: #ffffff !important;
+        }
+
+        .active, .menu-list:hover {
+            background-color: #5979b3;
+            color: red;
+        }
+
+            .active + .collapse {
+                display: block !important;
+            }
+    </style>
+</head>
+<body class="fixed-navbar fixed-layout">
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <header class="header">
+            <div class="page-brand">
+                <a class="link" href="javascript:;">
+                    <span class="brand">
+                        <img src="~/img/jwl-logo.png">
+                    </span>
+                    <span class="brand-mini">EV</span>
+                </a>
+            </div>
+            <div class="flexbox top-header flex-1">
+                <!-- START TOP-LEFT TOOLBAR-->
+                <ul class="nav navbar-toolbar">
+                    <li>
+                        <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
+                    </li>
+                </ul>
+                <!-- END TOP-LEFT TOOLBAR-->
+                <!-- START TOP-RIGHT TOOLBAR-->
+                <ul class="nav navbar-toolbar">
+                    <li class="dropdown dropdown-user">
+                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                            <img src="~/img/admin-avatar.png" />
+                            <span class="ad-name">@HttpContextAccessor.HttpContext.Session.GetString("UserName")  <i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            @*<a class="dropdown-item" href="profile.html"><i class="fa fa-user"></i>Profile</a>
+                                <a class="dropdown-item" href="profile.html"><i class="fa fa-cog"></i>Settings</a>
+                                <a class="dropdown-item" href="javascript:;"><i class="fa fa-support"></i>Support</a>
+                                <li class="dropdown-divider"></li>*@
+                            <li>
+                                @*<a class="dropdown-item" href="@Url.Action("Login", "Users")"><i class="fa fa-power-off"></i>Logout</a>*@
+                                <a class="dropdown-item" href="#" onclick="signOut();"><i class="fa fa-power-off"></i>Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- END TOP-RIGHT TOOLBAR-->
+            </div>
+        </header>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <nav class="page-sidebar" id="sidebar">
+            <div id="sidebar-collapse">
+                <ul class="side-menu metismenu">
+                    @if (@HttpContextAccessor.HttpContext.Session.GetString("UserType") == "Admin")
+                    {
+                        <li>
+                            <a class="menu-list" id="idmanageuser" href="@Url.Action("ManageUsers", "Users")">
+                                <i class="sidebar-item-icon fa fa-user" aria-hidden="true"></i>
+                                <span class="nav-label">Manage Users</span>
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a class="menu-list" id="idCarriers" href="@Url.Action("ManageCarriers", "carrier")">
+                            <i class="sidebar-item-icon fa fa-truck" aria-hidden="true"></i>
+                            <span class="nav-label">Manage Carriers</span>@*<i class="fa fa-caret-left arrow"></i>*@
+                        </a>
+
+                    </li>
+                    @if (@HttpContextAccessor.HttpContext.Session.GetString("UserType") == "Admin")
+                    {
+                        <li>
+                            <a class="menu-list" id="idMasterData" href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-bookmark"></i>
+                                <span class="nav-label">Master Data</span><i class="fa fa-caret-left arrow"></i>
+                            </a>
+                            <ul class="nav-2-level collapse">
+                                <li>
+                                    <a class="menu-list" id="idVehicleType" href="@Url.Action("Index", "Vehicle")">Vehicle Types</a>
+                                </li>
+                                <li>
+                                    <a class="menu-list" id="idCargoSpecial" href="@Url.Action("Index", "cargospecialties")">Cargo Specialities</a>
+                                </li>
+                                @*<li>
+                                        <a href="@Url.Action("Index", "marketstates")">Operating States</a>
+                                    </li>*@
+                                <li>
+                                    <a class="menu-list" id="idPaymentMethod" href="@Url.Action("Index", "PaymentTypes")">Payment Methods</a>
+                                </li>
+                                @*<li>
+                                        <a href="@Url.Action("Index", "cities")">Cities</a>
+                                    </li>*@
+                                <li>
+                                    <a class="menu-list" id="idState" href="@Url.Action("Index", "state")">States</a>
+                                </li>
+                                <li>
+                                    <a class="menu-list" id="idTrailerType" href="@Url.Action("Index", "Trailer")">Trailer Types</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li>
+                        <a class="menu-list" id="idReports" href="@Url.Action("Index", "Reports")">
+                            <i class="sidebar-item-icon fa fa-bar-chart" aria-hidden="true"></i>
+                            <span class="nav-label">Reports</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </nav>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            @RenderBody()
+
+            <!-- END PAGE CONTENT-->
+
+        </div>
+    </div>
+    <!-- BEGIN THEME CONFIG PANEL-->
+    <!-- END THEME CONFIG PANEL-->
+    <!-- BEGIN PAGA BACKDROPS-->
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop" style="display:none;">
+        <div class="page-preloader">Loading</div>
+    </div>
+    <!-- END PAGA BACKDROPS-->
+    <!-- CORE PLUGINS-->
+    <script src="~/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+
+    <script src="~/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/vendors/metisMenu/dist/metisMenu.min.js" type="text/javascript"></script>
+    <script src="~/vendors/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="~/vendors/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL PLUGINS-->
+    <script src="~/vendors/chart.js/dist/Chart.min.js" type="text/javascript"></script>
+    <script src="~/vendors/jvectormap/jquery-jvectormap-2.0.3.min.js" type="text/javascript"></script>
+    <script src="~/vendors/jvectormap/jquery-jvectormap-world-mill-en.js" type="text/javascript"></script>
+    <script src="~/vendors/jvectormap/jquery-jvectormap-us-aea-en.js" type="text/javascript"></script>
+    @*<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>*@
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="~/js/app.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script src="~/js/scripts/dashboard_1_demo.js" type="text/javascript"></script>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <script>
+
+        function signOut() {
+            //debugger;
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                var win = window.open("/users/login", "_self"); return;
+            });
+        }
+        function onLoad() {
+            gapi.load('auth2', function () {
+                gapi.auth2.init();
+                //  var win = window.open("/users/login", "_self"); return;
+            });
+        }
+
+        $(document).ready(function () {
+            $(function () {
+                $(".select2_demo_1").select2({
+                    placeholder: "Select"
+                });
+
+                $("input[name='Vehicles'], input[name='roleGroup']").click(function () {
+                    if ($("#vsome").is(":checked")) {
+                        $(".que-div").show();
+                    } else {
+                        $(".que-div").hide();
+                    }
+                });
+            });
+
+            $(function () {
+                $("input[name='Contacts'], input[name='roleGroup']").click(function () {
+                    if ($("#csome").is(":checked")) {
+                        $(".csome").show();
+                    } else {
+                        $(".csome").hide();
+                    }
+                });
+            });
+
+            $(function () {
+                $("input[name='e-entries'], input[name='roleGroup']").click(function () {
+                    if ($("#e-entries").is(":checked")) {
+                        $(".e-entries").show();
+                    } else {
+                        $(".e-entries").hide();
+                    }
+                });
+            });
+
+            $(function () {
+                $("input[name='m-entries'], input[name='roleGroup']").click(function () {
+                    if ($("#m-entries").is(":checked")) {
+                        $(".m-entries").show();
+                    } else {
+                        $(".m-entries").hide();
+                    }
+                });
+            });
+            // Setup - add a text input to each footer cell
+            $('#example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#example').DataTable({
+                "oLanguage": {
+                    "sEmptyTable": "No data available"
+                },
+                initComplete: function () {
+                    // Apply the search
+                    this.api().columns().every(function () {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
+                    });
+                },
+                aoColumnDefs: [
+                    {
+                        bSortable: false,
+                        aTargets: [-1]
+                    }
+                ]
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function selectAll(addrole) {
+
+            var check = document.getElementsByName("roleGroup"),
+                radios = document.addrole.elements;
+
+            //If the first radio is checked
+            if (check[0].checked) {
+
+                for (i = 0; i < radios.length; i++) {
+
+                    //And the elements are radios
+                    if (radios[i].type == "radio") {
+
+                        //And the radio elements's value are 1
+                        if (radios[i].value == 1) {
+                            //Check all radio elements with value = 1
+                            radios[i].checked = true;
+                        }
+
+                    }//if
+
+                }//for
+
+                //If the second radio is checked
+            } else {
+
+                for (i = 0; i < radios.length; i++) {
+
+                    //And the elements are radios
+                    if (radios[i].type == "radio") {
+
+                        //And the radio elements's value are 0
+                        if (radios[i].value == 0) {
+
+                            //Check all radio elements with value = 0
+                            radios[i].checked = true;
+
+                        }
+
+                    }//if
+
+                }//for
+
+            };//if
+            return null;
+        }
+        $('a.menu-list').click(function (event) {
+
+            $('a.menu-list').removeClass("active");
+            //$(this).addClass("active
+
+            if (event.currentTarget.id == "idMasterData") {
+                $("#idMasterData").addClass("active");
+                return;
+            }
+
+        });
+    </script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/select2.full.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

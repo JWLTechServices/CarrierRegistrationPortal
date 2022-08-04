@@ -1,0 +1,131 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?mt240y');
+  src:  url('fonts/icomoon.eot?mt240y#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?mt240y') format('truetype'),
+    url('fonts/icomoon.woff?mt240y') format('woff'),
+    url('fonts/icomoon.svg?mt240y#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-plus-icon:before {
+  content: "\e921";
+}
+.icon-user-delete:before {
+  content: "\e91c";
+}
+.icon-meter-histroy-icon:before {
+  content: "\e91d";
+}
+.icon-expence-icon:before {
+  content: "\e91e";
+}
+.icon-photo-icon:before {
+  content: "\e91f";
+}
+.icon-car-svg:before {
+  content: "\e920";
+}
+.icon-settings_dark:before {
+  content: "\e91b";
+}
+.icon-fluid-mechanics:before {
+  content: "\e915";
+}
+.icon-ic_details:before {
+  content: "\e916";
+}
+.icon-ic_manual-transmission_dark:before {
+  content: "\e917";
+}
+.icon-ic_specifications_black:before {
+  content: "\e918";
+}
+.icon-info:before {
+  content: "\e919";
+}
+.icon-wheel_dark:before {
+  content: "\e91a";
+}
+.icon-calculation-operations-minus-sign:before {
+  content: "\e90b";
+}
+.icon-chat:before {
+  content: "\e90c";
+}
+.icon-cloud-backup-up-arrow:before {
+  content: "\e90d";
+}
+.icon-contract:before {
+  content: "\e90e";
+}
+.icon-download-button-1:before {
+  content: "\e90f";
+}
+.icon-download-button:before {
+  content: "\e910";
+}
+.icon-edit:before {
+  content: "\e911";
+}
+.icon-picture:before {
+  content: "\e912";
+}
+.icon-return-to-the-past:before {
+  content: "\e913";
+}
+.icon-rubbish-bin:before {
+  content: "\e914";
+}
+.icon-edit-icon:before {
+  content: "\e90a";
+}
+.icon-contact-info-icon02:before {
+  content: "\e902";
+}
+.icon-contact-info-icon03:before {
+  content: "\e903";
+}
+.icon-contact-user-icon:before {
+  content: "\e904";
+  color: #fff;
+}
+.icon-dashboard:before {
+  content: "\e905";
+  color: #fff;
+}
+.icon-fleet-man-icon:before {
+  content: "\e906";
+}
+.icon-icon01:before {
+  content: "\e907";
+}
+.icon-owner-icon:before {
+  content: "\e908";
+}
+.icon-staring-icon:before {
+  content: "\e909";
+  color: #fff;
+}
+.icon-adminstart-icon:before {
+  content: "\e900";
+}
+.icon-base-info-icon:before {
+  content: "\e901";
+}

@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "Thankyou";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>JWL Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/select2.min.css">
+    <link rel="stylesheet" media="screen" href="~/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="wrap-div">
+
+        <div class="pge-content">
+            <div class="container">
+                <div class="thanks-div">
+                    <div class="jwl-logo"><img class="img" src="~/img/jwl-logo.png" alt="JWL Logo"> </div>
+                    <h1>Thank You!</h1>
+                    <p>Thanks for Registration</p>
+                    <a href="@Url.Action("Create", "carrier")" class="btn btn-blue">Go to Home </a>
+                </div>
+            </div>
+        </div>
+
+        <!--End main Box -->
+    </div>
+    <script src="~/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/select2.full.min.js"></script>
+    <script>
+       $(document).ready(function () {
+           var jwlNDAURL = "@Html.Raw(TempData["JWLNDAPDF"])";
+            var masterBrokerCarrierURL = "@Html.Raw(TempData["MasterBrokerCarrierPDF"])";
+            var win = window.open(jwlNDAURL, '_blank');
+            var win = window.open(masterBrokerCarrierURL, '_blank');
+       });
+    </script>
+</body>
+
+</html>

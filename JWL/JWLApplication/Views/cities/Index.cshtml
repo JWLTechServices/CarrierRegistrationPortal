@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Models.city>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+    <style>
+        .dt-buttons {
+            display: none;
+        }
+    </style>
+<div class="page-content">
+    <!-- content header-->
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Cities</h2>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="right-button-box">
+                    <a asp-action="Create" class="btn btn-primary">Add New</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wt-box">
+        <table class="table" id="example" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>
+                        Cities
+                    </th>
+                    <th>
+                        States
+                    </th>
+                    <th>
+                        Active?
+                    </th>
+                    <th class="action-column">Action</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Cities</th>
+                    <th>States</th>
+                    <th>Active?</th>
+                    <th style="display:none;width:10%">Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cityName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.State.stateName)
+                        </td>
+                        <td>
+                            @{
+                                if(item.isActive == true)
+                                {
+                                    <label>Active</label>
+                                }
+                                else
+                                {
+                                    <label>In Active</label>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a class="edit-action" asp-action="Edit" asp-route-id="@item.cityId"><i class="fa fa-pencil font-20" aria-hidden="true"></i></a>
+                            <a class="delete-action" onclick="DeleteCity('@item.cityId');"><i class="fa fa-trash  font-20" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function DeleteCity(id) {
+            var r = confirm("Are you sure you want to delete City?");
+            if (r == true) {
+                $.ajax({
+                    url: "/cities/Delete",
+                    data: {
+                        id: id
+                    },
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (result) {
+                        alert(result);
+                        location.reload(true);
+                    }
+                });
+            } else {
+                txt = "You pressed Cancel!";
+            }
+
+        }
+    </script>
+}

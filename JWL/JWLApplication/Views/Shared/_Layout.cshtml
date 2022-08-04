@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - JWLApplication</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/customsite.css" />
+    <link href="~/vendors/select2/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrap-div" style="display:none;">
+        <header>
+            <div class="container">
+                <div class="d-flex header-row">
+                    <div class="jwl-logo"><img class="img" src="~/img/jwl-logo.png" alt="JWL Logo"> </div>
+                    <div class="page-title">
+                        <h1 class="p-title">Carrier Registration</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class="f-text">J.W. LOGISTICS, LLC © 2020</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <div class="preloader-backdrop">
+            <div class="page-preloader">Loading</div>
+        </div>
+        <!--End main Box -->
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/scripts/popper.min.js"></script>
+    <script src="~/vendors/select2/dist/js/select2.full.min.js" type="text/javascript"></script>
+    <script src="~/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            $(".js-select2").select2({
+                placeholder: "Select"
+            });
+            setTimeout(function () {
+                $('.preloader-backdrop').fadeOut(200);
+                $('body').addClass('has-animation');
+            }, 0);
+        });
+    </script>
+</body>
+</html>

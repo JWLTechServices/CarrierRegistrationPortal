@@ -1,0 +1,425 @@
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent
+}
+
+body {
+    line-height: 1
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block
+}
+
+    nav ul {
+        list-style: none
+    }
+
+blockquote, q {
+    quotes: none
+}
+
+    blockquote:before, blockquote:after, q:before, q:after {
+        content: none
+    }
+
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    text-decoration: none
+}
+
+mark {
+    background-color: #ff9;
+    color: #000;
+    font-style: italic;
+    font-weight: bold
+}
+
+del {
+    text-decoration: line-through
+}
+
+abbr[title], dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0
+}
+
+input, select {
+    vertical-align: middle
+}
+
+li {
+    list-style: none
+}
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* =============================================================================
+   My CSS
+   ========================================================================== */
+
+/* ---- base ---- */
+body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    position: relative;
+    font-size: 14px;
+}
+
+.jwl-logo {
+    width: 117px;
+    padding: 20px 0;
+}
+
+img {
+    width: 100%;
+    max-width: 100%;
+}
+
+.jwl-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.p-title {
+    color: #134078;
+    font-size: 52px;
+    line-height: 55px;
+    font-weight: 400;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 30px;
+}
+
+.cr-rgistration {
+    margin-top: 30px;
+    max-width: 750px;
+}
+
+.f-block-title {
+    font-size: 18px;
+    color: #000;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.mandatory-text {
+    color: #ff0000;
+    font-size: 14px;
+    font-style: italic;
+    padding-left: 40px;
+}
+
+.c-inform {
+    display: flex;
+}
+
+p.agree-date {
+    color: #666666;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: 25px;
+}
+
+    p.agree-date span {
+        color: #333;
+        padding-left: 7px;
+    }
+
+/*Form css*/
+label {
+    color: #666666;
+    font-weight: 700;
+    margin-bottom: 7px;
+    display: block;
+}
+
+span.req-sign {
+    color: #ff0000;
+    font-size: 16px;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #121212;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #8c8c8c;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+    .form-control:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #134078;
+        outline: 0;
+        box-shadow: 0 0 0 0rem rgba(19,64,120,.25);
+    }
+
+.form-elements [class*=col-], .jwl-container [class*=col-] {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-up-btn {
+    border: 1px solid #134078;
+    color: #134078;
+    background-color: #f8f8f8;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.flex-div {
+    display: flex;
+}
+
+.sing-div-r span {
+    padding: 0 10px 0 20px;
+    color: #666;
+}
+
+.sing-div-r {
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.file-formate {
+    color: #666666;
+    font-size: 11px;
+    font-style: italic;
+    margin-top: 5px;
+    display: block;
+}
+
+.upload-btn-wrapper.upload-doc {
+    margin-top: 21px;
+}
+
+h3.doc-title {
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+.btn-blue {
+    color: #fff;
+    background-color: #134078;
+    border-color: #134078;
+}
+
+    .btn-blue:hover, .btn-outline:hover {
+        background-color: #072d5d !important;
+        color: #fff !important;
+    }
+
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(2, 22, 43, 0.25);
+}
+
+.w-165 {
+    width: 165px;
+    height: 40px;
+}
+
+.btn-blue.btn-outline {
+    color: #134078;
+    background-color: transparent;
+    border-color: #134078;
+}
+
+.form-submit-btn {
+    margin: 30px 0;
+}
+
+p.f-text {
+    font-size: 16px;
+    color: #134078;
+    margin: 10px 0 50px;
+}
+/*Responsive media*/
+@media (max-width: 767px) {
+}
+
+@media (max-width: 600px) {
+    .cr-rgistration {
+        margin-top: 15px;
+    }
+
+    .jwl-logo {
+        width: 87px;
+    }
+
+    .p-title {
+        font-size: 28px;
+        line-height: 35px;
+        margin-bottom: 20px;
+    }
+
+    .c-inform {
+        flex-wrap: wrap;
+    }
+
+    .mandatory-text {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .flex-div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .sing-div-l {
+        width: 100%;
+    }
+
+    .sing-div-r span {
+        display: block;
+        padding: 12px 0;
+    }
+
+    .sing-div-r {
+        display: block;
+    }
+
+    .upload-btn-wrapper.upload-doc {
+        margin-top: 0;
+    }
+
+    .w-165 {
+        width: 135px;
+    }
+}
+/*Select 2 Dropdown*/
+.select2-search {
+    display: none;
+}
+
+.select2-hidden-accessible {
+    width: auto !important;
+}
+
+.select2-container {
+    width: 100%;
+}
+
+.js-select2 + .select2 .select2-selection__rendered {
+    line-height: calc(2.20rem);
+    padding-left: 10px;
+    color: #121212;
+    font-size: 16px;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #8c8c8c;
+    border-radius: 4px;
+    height: 38px;
+}
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        border-color: #6a6a6a transparent transparent transparent;
+        border-style: solid;
+        border-width: 5px 4px 0 4px;
+        height: 0;
+        left: 50%;
+        margin-left: -4px;
+        margin-top: 3px;
+        position: absolute;
+        top: 50%;
+        width: 0;
+    }
+
+.mr-top {
+    margin-top: 20px;
+}
+.thanks-div {
+    text-align: center;
+    max-width: 660px;
+    margin: 100px auto;
+    box-shadow: 0 0 25px 0 #ccc;
+    padding: 60px 0;
+    border-bottom: 3px solid #4e7996;
+}
+
+    .thanks-div h1 {
+        font-weight: 900;
+        font-size: 65px;
+        color: #134078;
+    }
+
+    .thanks-div p {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .thanks-div .jwl-logo {
+        margin: 0 auto;
+        padding-top: 0;
+    }
+
+@media (max-width: 767px) {
+    .thanks-div h1 {
+        font-size: 45px;
+    }
+}

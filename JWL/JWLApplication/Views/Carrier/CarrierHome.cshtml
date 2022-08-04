@@ -1,0 +1,89 @@
+﻿@model Models.carrierDashBoard
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Models
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_CarrierLayout.cshtml";
+}
+<style>
+    td:last-child a {
+        width: 21px;
+    }
+
+    .wrap-div {
+        display: block;
+    }
+
+    .horizontal-scrollable {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+<div class="page-content">
+    <!-- content header-->
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Carrier DashBoard</h2>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End header-->
+    <!-- page content-->
+    <div class="wt-box">
+        <!-- Main Tab Start-->
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="p-title">
+                    <h4><b>Carrier Performance Summary :</b> @Model.WeekNumber</h4>
+                </div>
+            </div>
+            <div class="col-lg-2 pull-right text-right">
+                @*<a class="" title="Click Here to View Details" href='@Url.Action("CarrierKPIDetails", "carrier", new { param = Model.WeekNumber })'> <i class="fa fa-arrow-right"></i></a>*@
+                <a class="" title="Click Here to View Details" href='@Url.Action("CarrierKPIDetails", "carrier")'> <i class="fa fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <br />
+        <div class="table-responsive-lg horizontal-scrollable">
+            <table id="" class="table " style="width:100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            Delivery Scan Percentage : @Model.DeliveryScanPercentage
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Load Scan Percentage : @Model.LoadScanPercentage
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Photo Compliance Percentage : @Model.PhotoCompliancePercentage
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            GPS Compliance Percentage :  @Model.GPSCompliancePercentage
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- End main Tab -->
+    </div>
+    <!-- End page content-->
+</div>
+<div id="viewKPIDetails" class="wrap-div">
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $('#idDashBorad').addClass("active");
+    </script>
+}

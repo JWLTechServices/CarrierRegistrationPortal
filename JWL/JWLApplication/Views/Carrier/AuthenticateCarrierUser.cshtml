@@ -1,0 +1,83 @@
+﻿@model Models.TwoFactorAuth
+@{
+    ViewData["Title"] = "Authonticate Carrier User";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title> JW | Authonticate Carrier User</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap" rel="stylesheet">
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <!-- THEME STYLES-->
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/css/custom.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+    <link href="~/css/pages/auth-light.css" rel="stylesheet" />
+</head>
+<body class="bg-silver-300">
+    <div class="content login-form">
+        <div class="login-box clearfix">
+            <div class="login-left">
+                <img src="~/img/loging-screen-img.png" alt="">
+                <div class="left-text">
+                    <img src="~/img/jwl-logo.png" alt="logo">
+                </div>
+            </div>
+            <div class="login-right">
+                <form asp-action="ValidateOtp">
+                    <h2 class="login-title">Enter your otp to validate:</h2>
+                    <div class="form-group">
+                        <div class="input-group-icon right">
+                            @Html.HiddenFor(m => m.ActualOtp)
+                            @Html.HiddenFor(m => m.Token)
+                            @Html.HiddenFor(m => m.UserId)
+                            <input class="form-control" placeholder="otp" autocomplete="off" asp-for="Otp">
+                            <br/>
+                            <span asp-validation-for="Otp" class="text-danger"></span>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+
+                    </div>
+                    <div class="form-group btn-login-row">
+                        <button class="btn btn-info btn-login" type="submit">Validate</button>
+                        @if (Model != null && Model.OtpExpired == true && Model.OtpResend == true)
+                        {
+                            <a href="@Url.Action("AuthenticateCarrierUser", "carrier")" class="btn btn-info btn-login">Resend Otp </a>
+                        }
+                    </div>
+                    <!--  <div class="social-auth-hr">
+                        <span>OR</span>
+                     </div> -->
+                    <!-- <div class="text-center">
+                       <a class="google-btn" href="javascript:void(0)">LOGIN WITH GOOGLE</a>
+                    </div> -->
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- BEGIN PAGA BACKDROPS-->
+    @*<div class="sidenav-backdrop backdrop"></div>
+        <div class="preloader-backdrop">
+            <div class="page-preloader">Loading</div>
+        </div>*@
+    <!-- END PAGA BACKDROPS-->
+    <!-- CORE PLUGINS -->
+    <script src="~/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="~/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL PLUGINS -->
+    <script src="~/vendors/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="~/js/app.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    
+</body>
+</html>

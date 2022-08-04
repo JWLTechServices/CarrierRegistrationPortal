@@ -1,0 +1,208 @@
+﻿@*@model IEnumerable<Models.carrierKPI>*@
+@model Models.carrierKPI
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Models
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_CarrierLayout.cshtml";
+    //Layout = null;
+}
+<link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+<!-- THEME STYLES-->
+<link href="~/css/main.css" rel="stylesheet" />
+<link href="~/css/custom.css" rel="stylesheet" />
+<!-- PAGE LEVEL STYLES-->
+<link href="~/css/pages/auth-light.css" rel="stylesheet" />
+
+<style>
+    td:last-child a {
+        width: 21px;
+    }
+
+    .wrap-div {
+        display: block;
+    }
+
+    .horizontal-scrollable {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="page-content">
+    <!-- content header-->
+    <div class="content-header">
+        <div class="row h-60 align-items-center">
+            <div class="col-lg-6">
+                <div class="p-title">
+                    <h2>Carrier KPI's</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End header-->
+    <!-- page content-->
+    <div class="wt-box">
+        <!-- Main Tab Start-->
+
+        <div class="col-lg-12">
+            <div class="p-title">
+                <h2><b>Carrier KPI Summary :</b> @ViewBag.CarrierName</h2>
+            </div>
+        </div>
+        <div class="table-responsive-lg horizontal-scrollable">
+            <table id="" class="table " style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Week Number</th>
+                        @*<th>Carrier</th>*@
+                        <th>Action</th>
+                        <th>Weekly Count</th>
+                        <th>Expected Pieces</th>
+                        <th>Load Scan Count</th>
+                        <th>Delivery Scan Count</th>
+                        <th>Photo Compliance Count</th>
+                        <th>GPS Compliance Count</th>
+                        <th>Load Scan Percentage</th>
+                        <th>Photo Compliance Percentage</th>
+                        <th>GPS Compliance Percentage</th>
+                        <th>Load Scan Bonus Or Deduction</th>
+                        <th>Delivery Scan Bonus Or Deduction</th>
+                        <th>Photo Bonus Or Deduction</th>
+                        <th>GPS Compliance Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction To Be Applied</th>
+
+                    </tr>
+                </thead>
+                <!--<tfoot>
+                    <tr>
+                        <th>Week Number</th>-->
+                @*<th>Carrier</th>*@
+                <!--<th>Weekly Count</th>
+                        <th>Expected Pieces</th>
+                        <th>Load Scan Count</th>
+                        <th>Delivery Scan Count</th>
+                        <th>Photo Compliance Count</th>
+                        <th>GPSCompliance Count</th>
+                        <th>Load Scan Percentage</th>
+                        <th>Photo Compliance Percentage</th>
+                        <th>GPS Compliance Percentage</th>
+                        <th>Load Scan Bonus Or Deduction</th>
+                        <th>Delivery Scan Bonus Or Deduction</th>
+                        <th>Photo Bonus Or Deduction</th>
+                        <th>GPS Compliance Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction</th>
+                        <th>Total Bonus Or Deduction To Be Applied</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>-->
+                <tbody>
+                    @if (Model.carrierKPISummary.Count > 0)
+                    {
+                        @foreach (var item in Model.carrierKPISummary)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WeekNumber)
+                                </td>
+                                <td>
+                                    <input type="button" class="viewDetailsByWeekNumber"
+                                           value="View Details" />
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Carrier)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.WeeklyCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ExpectedPieces)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoComplianceCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSComplianceCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanPercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoCompliancePercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSCompliancePercentage)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoadScanBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DeliveryScanBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhotoBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.GPSComplianceBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalBonusOrDeduction)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalBonusOrDeductionToBeApplied)
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="17">
+                                <span class="text-center"> <b>Carrier KPI's not found for this carrier</b></span>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+        <!-- End main Tab -->
+
+
+    </div>
+
+
+    <!-- End page content-->
+</div>
+<div id="viewKPIDetails" class="wrap-div">
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    </script>
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".viewDetailsByWeekNumber").click(function (evt) {
+            var cell = $(evt.target).closest("tr").children().first();
+            var WeekNumber = cell.text().trim();
+           // $('#viewKPIDetails').load('@Url.Action("ViewCarrierKPIDetails", "carrier", null)');
+            $("#viewKPIDetails").load("/carrier/ViewCarrierKPIDetails",
+               { WeekNumber: WeekNumber }   );
+        });
+    });
+</script>
