@@ -97,7 +97,7 @@ namespace CarrierDataPushing
             return objresponse;
         }
 
-        public ReturnResponse UpdateURL(carrierusers carrierUser, string UserID)
+        public ReturnResponse UpdateCarrier(carrierusers carrierUser, string UserID)
         {
             ReturnResponse objresponse = new ReturnResponse();
             try
@@ -108,7 +108,7 @@ namespace CarrierDataPushing
                     carrierusers.cuName = carrierUser.cuName;
                     carrierusers.cuEmail = carrierUser.cuEmail;
                     carrierusers.agreementDate = carrierUser.agreementDate;
-                   // carrierusers.agreementDate = carrierUser.agreementDate;
+                    // carrierusers.agreementDate = carrierUser.agreementDate;
                     carrierusers.MC = carrierUser.MC;
                     // carrierusers.MC = carrierUser.MC;
                     carrierusers.authorizedPerson = carrierUser.authorizedPerson;
@@ -180,6 +180,11 @@ namespace CarrierDataPushing
                     carrierusers.Ins100KCargo = carrierUser.Ins100KCargo;
                     carrierusers.ndaUrl = carrierUser.ndaUrl;
                     carrierusers.mbcaUrl = carrierUser.mbcaUrl;
+                    carrierusers.COIExpiryDate = carrierUser.COIExpiryDate;
+                    carrierusers.dx_vendor_id = carrierUser.dx_vendor_id;
+                    carrierusers.carriertype = carrierUser.carriertype;
+                    carrierusers.nametoprintoncheck = carrierUser.nametoprintoncheck;
+                    carrierusers.dtuid = carrierUser.dtuid;
                     // carrierusers.scacCode = carrierUser.scacCode;
 
                     //_jWLDBContext.carrierusers.Update(carrierusers);
@@ -212,13 +217,22 @@ namespace CarrierDataPushing
         }
         public string CheckDOT(string DOT)
         {
+            string strReturn = string.Empty;
             try
             {
                 using (var _jWLDBContext = new clsJWLDBContext())
                 {
                     var Carriers = _jWLDBContext.carrierusers.AsNoTracking().Where(x => x.addtionalDot != null);
                     bool IsDOT = Carriers.Any(t => t.addtionalDot.ToLower() == DOT.ToLower());
-                    return IsDOT.ToString();
+
+                    if (IsDOT)
+                    {
+                        carrierusers carrierusers = _jWLDBContext.carrierusers.Where(t => t.addtionalDot.ToLower() == DOT.ToLower()).FirstOrDefault();
+                        strReturn = carrierusers.cuId.ToString();
+                    }
+                    return IsDOT.ToString() + "$" + strReturn;
+
+                    //return IsDOT.ToString();
                 }
             }
             catch (Exception ex)
@@ -231,13 +245,19 @@ namespace CarrierDataPushing
 
         public string CheckEmail(string Email)
         {
+            string strReturn = string.Empty;
             try
             {
                 using (var _jWLDBContext = new clsJWLDBContext())
                 {
                     var Carriers = _jWLDBContext.carrierusers.AsNoTracking().Where(x => x.cuEmail != null);
                     bool IsEmail = Carriers.Any(t => t.cuEmail.ToLower() == Email.ToLower());
-                    return IsEmail.ToString();
+                    if (IsEmail)
+                    {
+                        carrierusers carrierusers = _jWLDBContext.carrierusers.Where(t => t.cuEmail.ToLower() == Email.ToLower()).FirstOrDefault();
+                        strReturn = carrierusers.cuId.ToString();
+                    }
+                    return IsEmail.ToString() + "$" + strReturn;
                 }
             }
             catch (Exception ex)
@@ -251,13 +271,21 @@ namespace CarrierDataPushing
 
         public string CheckDataTrac_UID(string dtuid)
         {
+            string strReturn = string.Empty;
             try
             {
                 using (var _jWLDBContext = new clsJWLDBContext())
                 {
                     var Carriers = _jWLDBContext.carrierusers.AsNoTracking().Where(x => x.dtuid != null);
                     bool Isdtuid = Carriers.Any(t => t.dtuid.ToLower() == dtuid.ToLower());
-                    return Isdtuid.ToString();
+
+                    if (Isdtuid)
+                    {
+                        carrierusers carrierusers = _jWLDBContext.carrierusers.Where(t => t.dtuid.ToLower() == dtuid.ToLower()).FirstOrDefault();
+                        strReturn = carrierusers.cuId.ToString();
+                    }
+                    return Isdtuid.ToString() + "$" + strReturn;
+                   // return Isdtuid.ToString();
                 }
             }
             catch (Exception ex)
@@ -280,7 +308,7 @@ namespace CarrierDataPushing
                     .Select(s => s[random.Next(s.Length)]).ToArray());
                 clsCarrierService objcarrierUser = new clsCarrierService();
                 var Checkdtuid = objcarrierUser.CheckDataTrac_UID(dtuid);
-                if (Checkdtuid == "False")
+                if (Checkdtuid.Split("$")[0] == "False")
                 {
                     break;
                 }
@@ -370,7 +398,7 @@ namespace CarrierDataPushing
                 string strPDFTemplatePath = GetConfigValue("FilePath");
                 string OnboardingFile = $@"{strPDFTemplatePath}/\MailTemplate\/Approved.html";
                 var UserHTML = string.Join("", System.IO.File.ReadAllLines(OnboardingFile));
-                UserHTML = UserHTML.Replace("##Date##", DateTime.Now.ToString("MMM dd, yyyy")).Replace("##Name##", Name).Replace("##LogoUrlInTemplate##", GetConfigValue("LogoUrlInTemplate")).Replace("##DisclaimerReplyEmailId##", GetConfigValue("DisclaimerReplyEmailId")); 
+                UserHTML = UserHTML.Replace("##Date##", DateTime.Now.ToString("MMM dd, yyyy")).Replace("##Name##", Name).Replace("##LogoUrlInTemplate##", GetConfigValue("LogoUrlInTemplate")).Replace("##DisclaimerReplyEmailId##", GetConfigValue("DisclaimerReplyEmailId"));
 
                 //Start -- To send set password link to carrier for the first time
                 Guid AuthToken = Guid.NewGuid();

@@ -90,6 +90,17 @@ namespace CarrierDataPushing
                                     if (cuEmail == DBNull.Value)
                                         break;
 
+                                    Boolean AlreadyExistAtJWL = false;
+                                    Boolean AlreadyExistdtuid = false;
+
+                                    Boolean AlreadyExistEmail = false;
+                                    Boolean AlreadyExistDot = false;
+                                    Boolean IsDT_UIDNew = false;
+
+                                    int AlreadyExistEmailCuId=0;
+                                    int AlreadyExistDotCuId=0;
+                                    int AlreadyExistdtuidCuId=0;
+
                                     try
                                     {
                                         carrierusers carrierUser = new carrierusers();
@@ -129,7 +140,6 @@ namespace CarrierDataPushing
                                             dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
                                             objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
                                    strInputFilePath, strFileName, strDatetime, "Error");
-
                                             continue;
                                         }
 
@@ -155,7 +165,7 @@ namespace CarrierDataPushing
                                         }
 
                                         carrierUser.additionalHazmatCertified = additionalHazmatCertified;
-                                        
+
                                         carrierUser.authorizedSignature = Convert.ToString(dr["Authorized Signature"]);
 
                                         carrierUser.additionalFedaralID = Convert.ToString(dr["Federal Tax ID"]);
@@ -163,9 +173,8 @@ namespace CarrierDataPushing
                                         //Local
                                         carrierUser.serviceArea = Convert.ToString(dr["Service Area"]);
 
-
                                         // carrierUser.status = StatusEnum(Convert.ToString(dr["Service Area"]));
-
+              
                                         //  Carrier
                                         // Broker
 
@@ -211,30 +220,41 @@ namespace CarrierDataPushing
                                         }
 
                                         var CheckEmail = objcarrierUser.CheckEmail(carrierUser.cuEmail);
-                                        if (CheckEmail == "True")
+                                        if (CheckEmail.Split("$")[0] == "True")
                                         {
-                                            exceptiondataTable.Rows.Add(dr.ItemArray);
+                                            AlreadyExistAtJWL = true;
+                                            AlreadyExistEmail = true;
+
+                                            AlreadyExistEmailCuId = Convert.ToInt16(CheckEmail.Split("$")[1]);
+
+                                            //exceptiondataTable.Rows.Add(dr.ItemArray);
                                             strExecutionLogMessage = "Carrier Registration Failed " + System.Environment.NewLine;
                                             strExecutionLogMessage += "Cannot process this record as email id already exist " + System.Environment.NewLine;
                                             strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
                                             strExecutionLogMessage += "Email Id -" + carrierUser.cuEmail + System.Environment.NewLine;
+                                            strExecutionLogMessage += "DOT -" + carrierUser.addtionalDot + System.Environment.NewLine;
                                             objCommon.WriteExecutionLog(strExecutionLogMessage);
 
-                                            clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
-                                            objErrorResponse.error = "Cannot process this record as email id already exist";
-                                            objErrorResponse.code = "Carrier Registration Failed ";
-                                            objErrorResponse.reference = carrierUser.cuEmail;
-                                            string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
-                                            DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
-                                            dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
-                                            objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
-                                   strInputFilePath, strFileName, strDatetime, "Error");
-                                            continue;
+                                   //         clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
+                                   //         objErrorResponse.error = "Cannot process this record as email id already exist";
+                                   //         objErrorResponse.code = "Carrier Registration Failed ";
+                                   //         objErrorResponse.reference = carrierUser.cuEmail;
+                                   //         string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
+                                   //         DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
+                                   //         dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
+                                   //         objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
+                                   //strInputFilePath, strFileName, strDatetime, "Error");
+                                            // continue;
                                         }
+
                                         var CheckDot = objcarrierUser.CheckDOT(carrierUser.addtionalDot);
-                                        if (CheckDot == "True")
+                                        if (CheckDot.Split("$")[0] == "True")
                                         {
-                                            exceptiondataTable.Rows.Add(dr.ItemArray);
+                                            AlreadyExistAtJWL = true;
+                                            AlreadyExistDot = true;
+                                            AlreadyExistDotCuId = Convert.ToInt16(CheckDot.Split("$")[1]);
+                                            
+                                            //exceptiondataTable.Rows.Add(dr.ItemArray);
                                             strExecutionLogMessage = "Carrier Registration Failed " + System.Environment.NewLine;
                                             strExecutionLogMessage += "Cannot process this record as DOT already exist " + System.Environment.NewLine;
                                             strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
@@ -243,24 +263,29 @@ namespace CarrierDataPushing
                                             objCommon.WriteExecutionLog(strExecutionLogMessage);
 
 
-                                            clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
-                                            objErrorResponse.error = "Cannot process this record as DOT already exist";
-                                            objErrorResponse.code = "Carrier Registration Failed ";
-                                            objErrorResponse.reference = carrierUser.cuEmail;
-                                            string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
-                                            DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
-                                            dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
-                                            objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
-                                   strInputFilePath, strFileName, strDatetime, "Error");
+                                   //         clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
+                                   //         objErrorResponse.error = "Cannot process this record as DOT already exist";
+                                   //         objErrorResponse.code = "Carrier Registration Failed ";
+                                   //         objErrorResponse.reference = carrierUser.cuEmail;
+                                   //         string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
+                                   //         DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
+                                   //         dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
+                                   //         objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
+                                   //strInputFilePath, strFileName, strDatetime, "Error");
 
-                                            continue;
+                                            //continue;
                                         }
                                         if (carrierUser.dtuid != null)
                                         {
+                                            IsDT_UIDNew = false;
+
                                             var CheckDTUID = objcarrierUser.CheckDataTrac_UID(carrierUser.dtuid);
-                                            if (CheckDTUID == "True")
+                                            if (CheckDTUID.Split("$")[0] == "True")
                                             {
-                                                exceptiondataTable.Rows.Add(dr.ItemArray);
+                                                AlreadyExistAtJWL = true;
+                                                AlreadyExistdtuid = true;
+                                                AlreadyExistdtuidCuId = Convert.ToInt16(CheckDTUID.Split("$")[1]);
+                                               // exceptiondataTable.Rows.Add(dr.ItemArray);
                                                 strExecutionLogMessage = "Carrier Registration Failed " + System.Environment.NewLine;
                                                 strExecutionLogMessage += "Cannot process this record as DataTrac_UID already exist " + System.Environment.NewLine;
                                                 strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
@@ -268,21 +293,23 @@ namespace CarrierDataPushing
                                                 strExecutionLogMessage += "DataTrac_UID -" + carrierUser.dtuid + System.Environment.NewLine;
                                                 objCommon.WriteExecutionLog(strExecutionLogMessage);
 
-                                                clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
-                                                objErrorResponse.error = "Cannot process this record as DataTrac_UID already exist ";
-                                                objErrorResponse.code = "Carrier Registration Failed ";
-                                                objErrorResponse.reference = carrierUser.cuEmail;
-                                                string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
-                                                DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
-                                                dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
-                                                objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
-                                       strInputFilePath, strFileName, strDatetime, "Error");
-                                                continue;
+                                       //         clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
+                                       //         objErrorResponse.error = "Cannot process this record as DataTrac_UID already exist ";
+                                       //         objErrorResponse.code = "Carrier Registration Failed ";
+                                       //         objErrorResponse.reference = carrierUser.cuEmail;
+                                       //         string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
+                                       //         DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
+                                       //         dsFailureResponse.Tables[0].TableName = "CarierRegistrationFailure";
+                                       //         objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
+                                       //strInputFilePath, strFileName, strDatetime, "Error");
+                                                // continue;
                                             }
                                         }
                                         else
                                         {
                                             // genarate dtuid and set 
+                                            AlreadyExistdtuid = false;
+                                            IsDT_UIDNew = true;
                                             carrierUser.dtuid = objcarrierUser.GenerateDatatrac_UID();
                                         }
 
@@ -316,14 +343,88 @@ namespace CarrierDataPushing
                                             continue;
                                         }
 
-
                                         carrierUser.createdByUserName = carrierUser.authorizedPerson;
+
+                                        if (AlreadyExistAtJWL)
+                                        {
+                                           // int AlreadyExistEmailCuId;
+                                           // int AlreadyExistDotCuId;
+                                            //int AlreadyExistdtuidCuId;
+
+                                            if (AlreadyExistEmailCuId == AlreadyExistDotCuId )
+                                            {
+                                                carrierUser.cuId = AlreadyExistEmailCuId;
+                                                UpdateCarrierdataInDataTrac(carrierUser);
+                                            }
+                                            else
+                                            {
+                                                exceptiondataTable.Rows.Add(dr.ItemArray);
+                                                strExecutionLogMessage = "Carrier Details Updation Failed " + System.Environment.NewLine;
+                                                strExecutionLogMessage += "We cannot update this record as data already exist for multiple carriers. " + System.Environment.NewLine;
+                                                strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
+                                                strExecutionLogMessage += "Email Id -" + carrierUser.cuEmail + System.Environment.NewLine;
+                                                strExecutionLogMessage += "DOT -" + carrierUser.addtionalDot + System.Environment.NewLine;
+                                                strExecutionLogMessage += "Status -" + status + System.Environment.NewLine;
+                                                objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+                                                clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
+                                                objErrorResponse.error = "We cannot update this record as data alredy exist for various carriers.";
+                                                objErrorResponse.code = "Carrier Details Updation Failed ";
+                                                objErrorResponse.reference = carrierUser.cuEmail;
+                                                string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
+                                                DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
+                                                dsFailureResponse.Tables[0].TableName = "CarierDetailsUpdationFailure";
+                                                objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
+                                       strInputFilePath, strFileName, strDatetime, "Error");
+                                                continue;
+                                            }
+
+                                            clsCommon.ReturnResponse objresponse1 = new clsCommon.ReturnResponse();
+                                            objresponse1 = objcarrierUser.UpdateCarrier(carrierUser, "");
+                                            if (objresponse1.ResponseVal)
+                                            {
+                                                strExecutionLogMessage = "Carrier Details Updation Completed" + System.Environment.NewLine;
+                                                strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
+                                                strExecutionLogMessage += "Email Id -" + carrierUser.cuEmail + System.Environment.NewLine;
+                                                objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+                                                clsCommon.SuccessResponse objSuccessResponse = new clsCommon.SuccessResponse();
+                                                objSuccessResponse.reference = cuEmail.ToString();
+                                                string strSuccessResponse = JsonConvert.SerializeObject(objSuccessResponse);
+                                                DataSet dsSuccessResponse = objCommon.jsonToDataSet(strSuccessResponse);
+                                                dsSuccessResponse.Tables[0].TableName = "CarierDetailsUpdationSuccess";
+                                                objCommon.WriteDataToCsvFile(dsSuccessResponse.Tables[0],
+                                       strInputFilePath, strFileName, strDatetime, "Success");
+
+                                            }
+                                            else
+                                            {
+                                                exceptiondataTable.Rows.Add(dr.ItemArray);
+                                                strExecutionLogMessage = "Carrier Details Updation Failed" + System.Environment.NewLine;
+                                                strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
+                                                strExecutionLogMessage += "Email Id -" + carrierUser.cuEmail + System.Environment.NewLine;
+                                                objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+                                                clsCommon.ErrorResponse objErrorResponse = new clsCommon.ErrorResponse();
+                                                objErrorResponse.error = "Carrier Details Updation Failed";
+                                                objErrorResponse.code = "Carrier Details Updation Failed";
+                                                objErrorResponse.reference = carrierUser.cuEmail;
+                                                string strErrorResponse = JsonConvert.SerializeObject(objErrorResponse);
+                                                DataSet dsFailureResponse = objCommon.jsonToDataSet(strErrorResponse);
+                                                dsFailureResponse.Tables[0].TableName = "CarierDetailsUpdationFailure";
+                                                objCommon.WriteDataToCsvFile(dsFailureResponse.Tables[0],
+                                       strInputFilePath, strFileName, strDatetime, "Error");
+                                                continue;
+                                            }
+                                            continue;
+
+                                        }
+
 
                                         byte[] salt = CreateSalt();
                                         byte[] hash = HashPassword(strDefaultPassword, salt);
                                         string bas64Passwordhash = Convert.ToBase64String(hash);
                                         string bas64PasswordSalt = Convert.ToBase64String(salt);
-
 
                                         clsCommon.ReturnResponse objresponse = new clsCommon.ReturnResponse();
                                         objresponse = objcarrierUser.AddCarrierUser(carrierUser, "", bas64Passwordhash, bas64PasswordSalt);
@@ -335,45 +436,58 @@ namespace CarrierDataPushing
 
                                             objCommon.WriteExecutionLog(strExecutionLogMessage);
 
-                                            strExecutionLogMessage = "Update Carrier data In DataTrac Started " + System.Environment.NewLine;
-                                            objCommon.WriteExecutionLog(strExecutionLogMessage);
+                                            //strExecutionLogMessage = "Update Carrier data In DataTrac Started " + System.Environment.NewLine;
+                                            //objCommon.WriteExecutionLog(strExecutionLogMessage);
 
-                                            amazon_equipment_owner objrequest = new amazon_equipment_owner();
-                                            string amazon_equipment_ownerrequest = null;
-                                            amazon_equipment_ownerrequest = @"'cuId': '" + carrierUser.cuId + "'";
-                                            //  amazon_equipment_ownerrequest = amazon_equipment_ownerrequest + @"'cuId': '" + carrierusers.cuId + "'";
-                                            amazon_equipment_ownerrequest = @"{" + amazon_equipment_ownerrequest + "}";
-                                            string amazon_equipment_owner_RequestObject = @"{'amazon_equipment_owner': " + amazon_equipment_ownerrequest + "}";
-                                            clsCommon.ReturnResponse objdatatracresponse = new clsCommon.ReturnResponse();
-                                            clsDatatrac objclsDatatrac = new clsDatatrac();
-                                            JObject jsonobj = JObject.Parse(amazon_equipment_owner_RequestObject);
-                                            string request = jsonobj.ToString();
-                                            objdatatracresponse = objclsDatatrac.DataTrac_amazon_equipment_owner_PutAPI(carrierUser.dtuid, amazon_equipment_owner_RequestObject);
-                                            if(objdatatracresponse.ResponseVal)
+                                            //amazon_equipment_owner objrequest = new amazon_equipment_owner();
+                                            //string amazon_equipment_ownerrequest = null;
+                                            //amazon_equipment_ownerrequest = @"'cuId': '" + carrierUser.cuId + "'";
+                                            ////  amazon_equipment_ownerrequest = amazon_equipment_ownerrequest + @"'cuId': '" + carrierusers.cuId + "'";
+                                            //amazon_equipment_ownerrequest = @"{" + amazon_equipment_ownerrequest + "}";
+                                            //string amazon_equipment_owner_RequestObject = @"{'amazon_equipment_owner': " + amazon_equipment_ownerrequest + "}";
+                                            //clsCommon.ReturnResponse objdatatracresponse = new clsCommon.ReturnResponse();
+                                            //clsDatatrac objclsDatatrac = new clsDatatrac();
+                                            //JObject jsonobj = JObject.Parse(amazon_equipment_owner_RequestObject);
+                                            //string request = jsonobj.ToString();
+                                            //objdatatracresponse = objclsDatatrac.DataTrac_amazon_equipment_owner_PutAPI(carrierUser.dtuid, amazon_equipment_owner_RequestObject);
+                                            //if (objdatatracresponse.ResponseVal)
+                                            //{
+                                            //    strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI API Success " + System.Environment.NewLine;
+                                            //    strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                                            //    strExecutionLogMessage += "Response -" + objresponse.Reason + System.Environment.NewLine;
+                                            //    objCommon.WriteExecutionLog(strExecutionLogMessage);
+                                            //}
+                                            //else
+                                            //{
+                                            //    strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI Failed " + System.Environment.NewLine;
+                                            //    strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                                            //    strExecutionLogMessage += "Response -" + objresponse.Reason + System.Environment.NewLine;
+                                            //    objCommon.WriteExecutionLog(strExecutionLogMessage);
+                                            //}
+
+                                            //strExecutionLogMessage = "Update Carrier data In DataTrac Completed " + System.Environment.NewLine;
+                                            //objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+
+                                            //if (AlreadyExistAtJWL)
+                                            //{
+                                            //    UpdateCarrierdataInDataTrac(carrierUser);
+                                            //}
+                                            //else
+                                            //{
+                                            //    CreateCarrierdataInDataTrac(carrierUser);
+                                            //}
+
+                                            CreateCarrierdataInDataTrac(carrierUser);
+
+                                            if (Convert.ToString(objCommon.GetConfigValue("EnableSendEmailToCarrier")).ToUpper() == "Y")
                                             {
-                                                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI API Success " + System.Environment.NewLine;
-                                                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
-                                                strExecutionLogMessage += "Response -" + objresponse.Reason + System.Environment.NewLine;
+                                                strExecutionLogMessage = "Sending Email To Carrier Started " + System.Environment.NewLine;
+                                                objCommon.WriteExecutionLog(strExecutionLogMessage);
+                                                objcarrierUser.SendEmailToCarrier(carrierUser.authorizedPerson, carrierUser.cuEmail, carrierUser.cuId);
+                                                strExecutionLogMessage = "Sending Email To Carrier Completed " + System.Environment.NewLine;
                                                 objCommon.WriteExecutionLog(strExecutionLogMessage);
                                             }
-                                            else
-                                            {
-                                                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI Failed " + System.Environment.NewLine;
-                                                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
-                                                strExecutionLogMessage += "Response -" + objresponse.Reason + System.Environment.NewLine;
-                                                objCommon.WriteExecutionLog(strExecutionLogMessage);
-                                            }
-                                            //UpdateCarrierdataInDataTrac(carrierUser);
-                                            strExecutionLogMessage = "Update Carrier data In DataTrac Completed " + System.Environment.NewLine;
-                                            objCommon.WriteExecutionLog(strExecutionLogMessage);
-
-                                            strExecutionLogMessage = "Sending Email To Carrier Started " + System.Environment.NewLine;
-                                            objCommon.WriteExecutionLog(strExecutionLogMessage);
-                                            objcarrierUser.SendEmailToCarrier(carrierUser.authorizedPerson, carrierUser.cuEmail, carrierUser.cuId);
-                                            strExecutionLogMessage = "Sending Email To Carrier Completed " + System.Environment.NewLine;
-                                            objCommon.WriteExecutionLog(strExecutionLogMessage);
-
-
                                             strExecutionLogMessage = "Generating the PDF's Started " + System.Environment.NewLine;
                                             objCommon.WriteExecutionLog(strExecutionLogMessage);
 
@@ -447,8 +561,8 @@ namespace CarrierDataPushing
                                             objCommon.WriteExecutionLog(strExecutionLogMessage);
 
                                             clsCommon.ReturnResponse objresponse1 = new clsCommon.ReturnResponse();
-                                            objresponse1 = objcarrierUser.UpdateURL(carrierUser, "");
-                                            if (objresponse.ResponseVal)
+                                            objresponse1 = objcarrierUser.UpdateCarrier(carrierUser, "");
+                                            if (objresponse1.ResponseVal)
                                             {
                                                 strExecutionLogMessage = "Carrier Registration Completed and the URL also updated" + System.Environment.NewLine;
                                                 strExecutionLogMessage += "File Name -" + strFileName + System.Environment.NewLine;
@@ -530,7 +644,7 @@ namespace CarrierDataPushing
                                 DataSet dsResult = new DataSet();
                                 dsResult.Tables.Add(exceptiondataTable);
                                 dsResult.Tables[0].TableName = "Template";
-                                clsExcelHelper.ExportOutputtoXLSXFile(dsResult, strInputFilePath, strFileName,strDatetime);
+                                clsExcelHelper.ExportOutputtoXLSXFile(dsResult, strInputFilePath, strFileName, strDatetime);
                             }
                         }
                         else
@@ -607,18 +721,110 @@ namespace CarrierDataPushing
             bPDF = ms.ToArray();
             return bPDF;
         }
-        public static void UpdateCarrierdataInDataTrac(carrierusers carrierusers)
+
+        public static void UpdateCarrierdataInDataTrac(carrierusers carrierUser)
         {
+            string strExecutionLogMessage = string.Empty;
+            clsCommon objCommon = new clsCommon();
+            strExecutionLogMessage = "Update Carrier data In DataTrac Started " + System.Environment.NewLine;
+            objCommon.WriteExecutionLog(strExecutionLogMessage);
+
             amazon_equipment_owner objrequest = new amazon_equipment_owner();
             string amazon_equipment_ownerrequest = null;
-            amazon_equipment_ownerrequest = @"'cuId': '" + carrierusers.cuId + "',";
-          //  amazon_equipment_ownerrequest = amazon_equipment_ownerrequest + @"'cuId': '" + carrierusers.cuId + "'";
+            amazon_equipment_ownerrequest = @"'cuId': '" + carrierUser.cuId + "',";
+            amazon_equipment_ownerrequest = amazon_equipment_ownerrequest + @"'carrier_type': '" + carrierUser.carriertype + "',";
+            amazon_equipment_ownerrequest = amazon_equipment_ownerrequest + @"'nametoprintoncheck': '" + carrierUser.nametoprintoncheck + "',";
             amazon_equipment_ownerrequest = @"{" + amazon_equipment_ownerrequest + "}";
-            string amazon_equipment_owner_RequestObject = @"{'amazon_equipment_owner': " + amazon_equipment_ownerrequest + "}";
-            clsCommon.ReturnResponse objresponse = new clsCommon.ReturnResponse();
-            clsDatatrac objclsDatatrac = new clsDatatrac();
-            objresponse = objclsDatatrac.DataTrac_amazon_equipment_owner_PutAPI(carrierusers.dtuid, amazon_equipment_owner_RequestObject);
 
+
+            string amazon_equipment_owner_RequestObject = @"{'amazon_equipment_owner': " + amazon_equipment_ownerrequest + "}";
+            clsCommon.ReturnResponse objdatatracresponse = new clsCommon.ReturnResponse();
+            clsDatatrac objclsDatatrac = new clsDatatrac();
+            JObject jsonobj = JObject.Parse(amazon_equipment_owner_RequestObject);
+            string request = jsonobj.ToString();
+            objdatatracresponse = objclsDatatrac.DataTrac_amazon_equipment_owner_PutAPI(carrierUser.dtuid, amazon_equipment_owner_RequestObject);
+            if (objdatatracresponse.ResponseVal)
+            {
+                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI API Success " + System.Environment.NewLine;
+                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                strExecutionLogMessage += "Response -" + objdatatracresponse.Reason + System.Environment.NewLine;
+                objCommon.WriteExecutionLog(strExecutionLogMessage);
+            }
+            else
+            {
+                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PutAPI Failed " + System.Environment.NewLine;
+                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                strExecutionLogMessage += "Response -" + objdatatracresponse.Reason + System.Environment.NewLine;
+                objCommon.WriteExecutionLog(strExecutionLogMessage);
+            }
+            strExecutionLogMessage = "Update Carrier data In DataTrac Completed " + System.Environment.NewLine;
+            objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+        }
+
+        public static void CreateCarrierdataInDataTrac(carrierusers objcarrierusers)
+        {
+            string strExecutionLogMessage = string.Empty;
+            clsCommon objCommon = new clsCommon();
+            strExecutionLogMessage = "Create Carrier data In DataTrac Started " + System.Environment.NewLine;
+            objCommon.WriteExecutionLog(strExecutionLogMessage);
+
+            amazon_equipment_owner_Request objrequestdetails = new amazon_equipment_owner_Request();
+            amazon_equipment_owner objrequest = new amazon_equipment_owner();
+
+            objrequest.owner_id = objcarrierusers.dtuid;
+            objrequest.scac_code = Convert.ToString(objcarrierusers.additionalScac);
+            objrequest.carrier_type = objcarrierusers.carriertype;
+            objrequest.owner_name = objcarrierusers.authorizedPerson;
+            objrequest.key_id = objcarrierusers.cuId;
+
+            if (objcarrierusers.status == StatusEnum.Inprocess)
+            {
+                objrequest.carrier_status = Convert.ToString(CarrierStatusEnum.PEND);
+            }
+            else if (objcarrierusers.status == StatusEnum.Complete)
+            {
+                objrequest.carrier_status = Convert.ToString(CarrierStatusEnum.PEND);
+            }
+            else if (objcarrierusers.status == StatusEnum.Approved)
+            {
+                objrequest.carrier_status = Convert.ToString(CarrierStatusEnum.APPD);
+            }
+            else if (objcarrierusers.status == StatusEnum.Rejected)
+            {
+                objrequest.carrier_status = Convert.ToString(CarrierStatusEnum.TERM);
+            }
+            else if (objcarrierusers.status == StatusEnum.Onhold)
+            {
+                objrequest.carrier_status = Convert.ToString(CarrierStatusEnum.HOLD);
+            }
+
+            objrequest.ascend_vendor_id = null;
+            objrequest.dx_vendor_id = Convert.ToString(objcarrierusers.dx_vendor_id);
+            objrequest.check_name = objcarrierusers.nametoprintoncheck;
+            objrequestdetails.amazon_equipment_owner = objrequest;
+
+            clsCommon.ReturnResponse objdatatracresponse = new clsCommon.ReturnResponse();
+            clsDatatrac objclsDatatrac = new clsDatatrac();
+           
+            string request = JsonConvert.SerializeObject(objrequestdetails);
+            objdatatracresponse = objclsDatatrac.DataTrac_amazon_equipment_owner_PostAPI(objrequestdetails);
+            if (objdatatracresponse.ResponseVal)
+            {
+                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PostAPI API Success " + System.Environment.NewLine;
+                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                strExecutionLogMessage += "Response -" + objdatatracresponse.Reason + System.Environment.NewLine;
+                objCommon.WriteExecutionLog(strExecutionLogMessage);
+            }
+            else
+            {
+                strExecutionLogMessage = "DataTrac_amazon_equipment_owner_PostAPI Failed " + System.Environment.NewLine;
+                strExecutionLogMessage += "Request -" + request + System.Environment.NewLine;
+                strExecutionLogMessage += "Response -" + objdatatracresponse.Reason + System.Environment.NewLine;
+                objCommon.WriteExecutionLog(strExecutionLogMessage);
+            }
+            strExecutionLogMessage = "Create Carrier data In DataTrac Completed " + System.Environment.NewLine;
+            objCommon.WriteExecutionLog(strExecutionLogMessage);
         }
 
     }
